@@ -1,18 +1,29 @@
 package es.uvigo.dagss.recetas.entidades;
 
 import java.io.Serializable;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @DiscriminatorValue(value = "MEDICO")
 public class Medico extends Usuario {
 
-    // Anadir atributos propios
-    
+    @Column(unique = true)
+    private String DNI;
+
+    @Column(unique = true)
+    private String numColegiado;
+
+    private Nombre nombreCompleto;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CentroSalud centroSalud;
+
     public Medico() {
         super(TipoUsuario.MEDICO);
     }
-
-
 }
