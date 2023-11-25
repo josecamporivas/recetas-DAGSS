@@ -12,13 +12,11 @@ import lombok.Setter;
 @DiscriminatorValue(value = "MEDICO")
 public class Medico extends Usuario {
 
-    @Column(unique = true)
-    private String DNI;
-
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String numColegiado;
 
-    private Nombre nombreCompleto;
+    @Column(unique = true)
+    private Integer telefono;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private CentroSalud centroSalud;

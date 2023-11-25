@@ -16,9 +16,7 @@ public class Prescripcion implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPrescripcion;
 
-    @ManyToOne
-    private Medicamento medicamento;
-
+    @Column(nullable = false)
     private Double dosisDiaria;
 
     private String indicaciones;
@@ -30,8 +28,17 @@ public class Prescripcion implements Serializable {
     private Date fechaFinal;
 
     @Value("true")
-    private boolean activo;
+    private boolean estado;
 
     @ManyToOne
+    @Column(nullable = false)
     private Paciente paciente;
+
+    @ManyToOne
+    @Column(nullable = false)
+    private Medico medico;
+
+    @ManyToOne
+    @Column(nullable = false)
+    private Medicamento medicamento;
 }

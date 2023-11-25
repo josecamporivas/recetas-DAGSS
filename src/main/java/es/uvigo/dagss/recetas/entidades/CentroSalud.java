@@ -21,4 +21,7 @@ public class CentroSalud implements Serializable {
 
     @Column(unique = true)
     private String email;
+
+    private Boolean estado;
+
 }

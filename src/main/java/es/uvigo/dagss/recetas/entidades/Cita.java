@@ -17,7 +17,8 @@ public class Cita implements Serializable {
     private Long idCita;
 
     @Enumerated(EnumType.STRING)
-    private TipoEstadoCita estadoCita;
+    @Column(columnDefinition = "varchar(32) DEFAULT 'PLANIFICADA'")
+    private TipoEstadoCita estado = TipoEstadoCita.PLANIFICADA;
 
     @Value("15")
     private Integer duracion;
@@ -29,9 +30,11 @@ public class Cita implements Serializable {
     private Date hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
     private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
     private Medico medico;
 
 }

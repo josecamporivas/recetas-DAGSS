@@ -21,9 +21,7 @@ import jakarta.persistence.TemporalType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)  // Una tabla propia para cada subclase
-@DiscriminatorColumn(name = "TIPO_USUARIO",
-                     discriminatorType = DiscriminatorType.STRING,
-                     length = 20)
+@DiscriminatorColumn(name = "TIPO_USUARIO", discriminatorType = DiscriminatorType.STRING, length = 20)
 public abstract class Usuario implements Serializable {
 
     @Id
@@ -31,12 +29,23 @@ public abstract class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "USUARIO_GEN")
     private Long id;
 
+	@Column(length = 9, nullable = false)
+	protected String DNI;		//DUDA: no se si hacerlo unico
+
+	@Column(nullable = false)
+	protected Nombre nombreCompleto;
+
+	@Column(nullable = false)
+	protected String email; //DUDA: no se si ponerle unico
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_USUARIO", length = 20)
     protected TipoUsuario tipo;
 
+	@Column(nullable = false)
     private String login;
+
+	@Column(nullable = false)
     private String password;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -45,12 +54,12 @@ public abstract class Usuario implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimoAcceso;
 
-	private Boolean activo = true;
+	private Boolean estado = true;
 	
     public Usuario() {
         this.fechaAlta = Calendar.getInstance().getTime();
         this.ultimoAcceso = Calendar.getInstance().getTime();
-		this.activo = true;
+		this.estado = true;
     }
 
     public Usuario(TipoUsuario tipo) {
@@ -115,19 +124,19 @@ public abstract class Usuario implements Serializable {
 	}
 
     public Boolean getActivo() {
-        return activo;
+        return estado;
     }
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setActivo(Boolean estado) {
+        this.estado = estado;
     }
 
     public void activar() {
-        this.activo = true;
+        this.estado = true;
     }
 
     public void desactivar() {
-        this.activo = false;
+        this.estado = false;
     }
 
 	@Override
@@ -151,8 +160,4 @@ public abstract class Usuario implements Serializable {
 		return Objects.equals(fechaAlta, other.fechaAlta)
 				&& Objects.equals(login, other.login);
 	}
-
-
-    
- 
 }

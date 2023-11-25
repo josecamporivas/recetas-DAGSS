@@ -13,11 +13,6 @@ import lombok.Setter;
 @DiscriminatorValue(value = "PACIENTE")
 public class Paciente extends Usuario {
 
-	private Nombre nombreCompleto;
-
-    @Column(unique = true)
-    private String DNI;
-
     @Column(unique = true)
     private String numTarjetaSanitaria;
 
@@ -28,19 +23,13 @@ public class Paciente extends Usuario {
 
     private Integer telefono;
 
-    @Column(unique = true)
-    private String email;
-
     @Temporal(TemporalType.DATE)
-    private Date fechanac;
+    private Date fechaNac;
 
     @ManyToOne
-    private CentroSalud centroSaludAsignado;
+    @Column(nullable = false)
+    private Medico medicoAsignado; //El centro de salud asociado se obtiene a partir del médico
 
-    @ManyToOne
-    private Medico medicoAsignado; //TODO: EL MEDICO TIENE QUE ESTAR ASIGNADO AL CENTRO DE SALUD DEL PACIENTE
-                                   //QUIZAS EL TRUCO ES NO ALMACENAR EL CENTRO DE SALUD PQ YA LO SACAMOS CON LA CLAVE FORANEA DEL MEDICO
-    
     public Paciente() {
         super(TipoUsuario.PACIENTE);        
     }
