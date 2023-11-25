@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.entidades;
 
+import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoCita;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,9 @@
 package es.uvigo.dagss.recetas.entidades;
 
-import java.io.Serializable;
 import java.util.Date;
 
+import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
+import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class Paciente extends Usuario {
     private Medico medicoAsignado; //El centro de salud asociado se obtiene a partir del médico
 
     public Paciente() {
-        super(TipoUsuario.PACIENTE);        
+        super(TipoUsuario.PACIENTE);
     }
 
 }

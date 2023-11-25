@@ -1,5 +1,7 @@
 package es.uvigo.dagss.recetas.entidades;
 
+import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
+import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

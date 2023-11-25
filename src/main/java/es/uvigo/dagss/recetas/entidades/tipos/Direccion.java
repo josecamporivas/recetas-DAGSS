@@ -1,4 +1,4 @@
-package es.uvigo.dagss.recetas.entidades;
+package es.uvigo.dagss.recetas.entidades.tipos;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

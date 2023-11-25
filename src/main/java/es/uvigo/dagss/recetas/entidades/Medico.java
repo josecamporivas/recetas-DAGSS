@@ -1,7 +1,6 @@
 package es.uvigo.dagss.recetas.entidades;
 
-import java.io.Serializable;
-
+import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

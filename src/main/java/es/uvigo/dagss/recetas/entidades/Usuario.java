@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+
+import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
+import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
