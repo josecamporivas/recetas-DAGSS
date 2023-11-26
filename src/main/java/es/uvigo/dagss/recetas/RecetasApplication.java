@@ -1,13 +1,29 @@
 package es.uvigo.dagss.recetas;
 
+import es.uvigo.dagss.recetas.entidades.Administrador;
+import es.uvigo.dagss.recetas.servicios.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RecetasApplication {
+public class RecetasApplication implements CommandLineRunner {
+
+	@Autowired
+	private UsuarioService usuarioService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(RecetasApplication.class, args);
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		crearDatosEjemplo();
+	}
+
+	private void crearDatosEjemplo(){
+		Administrador admin = new Administrador("admin1", "admin1");
+		usuarioService.insertAdministrador(admin);
+	}
 }

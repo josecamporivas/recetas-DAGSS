@@ -32,13 +32,13 @@ public abstract class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "USUARIO_GEN")
     private Long id;
 
-	@Column(length = 9, nullable = false)
+	@Column(length = 9)
 	protected String DNI;		//DUDA: no se si hacerlo unico
 
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	protected Nombre nombreCompleto;
 
-	@Column(nullable = false)
+	//@Column(nullable = false)
 	protected String email; //DUDA: no se si ponerle unico
 
     @Enumerated(EnumType.STRING)

@@ -15,4 +15,8 @@ public class Administrador extends Usuario {
     public Administrador() {
         super(TipoUsuario.ADMINISTRADOR);
     }
+
+    public Administrador(String login, String password){
+        super(TipoUsuario.ADMINISTRADOR,login,password);
+    }
 }

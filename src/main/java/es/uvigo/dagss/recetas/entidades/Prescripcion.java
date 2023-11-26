@@ -31,14 +31,14 @@ public class Prescripcion implements Serializable {
     private boolean estado;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Paciente paciente;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Medico medico;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Medicamento medicamento;
 }
