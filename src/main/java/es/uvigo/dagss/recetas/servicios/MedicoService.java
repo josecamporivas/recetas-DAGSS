@@ -1,6 +1,5 @@
 package es.uvigo.dagss.recetas.servicios;
 
-import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;

@@ -1,9 +1,7 @@
 package es.uvigo.dagss.recetas.servicios;
 
-import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
-import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
 import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
 
 import java.util.List;
