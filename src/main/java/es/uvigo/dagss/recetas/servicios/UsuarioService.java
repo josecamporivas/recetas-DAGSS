@@ -1,12 +1,8 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.Administrador;
-import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Usuario;
-import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
-import es.uvigo.dagss.recetas.repositorios.FarmaciaRepository;
-import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
-import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
+import es.uvigo.dagss.recetas.repositorios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +51,4 @@ public class UsuarioService {
     public void deleteAdministradorById(Long id){
         administradorRepository.deleteById(id);
     }
-
-
 }
