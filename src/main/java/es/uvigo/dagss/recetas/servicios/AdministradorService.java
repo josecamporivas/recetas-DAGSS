@@ -1,9 +1,7 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.Administrador;
-import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
-import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
 
 import java.util.List;
 
@@ -20,9 +18,10 @@ public class AdministradorService {
      * indicando su datos esenciales (login, nombre del usuario, email, fecha de
      * registro/creación, fecha de último acceso, activo [true|false])
      */
-        public List<Administrador> getAll(){
-            return administradorRepository.findAll();
-        }
+    public List<Administrador> getAll() {
+        return administradorRepository.findAll();
+    }
+
     /*
      * Mediante un botón Nuevo se accederá a la creación de un nuevo usuario
      * administrador, asignándosele manualmente un password inicial. Una vez

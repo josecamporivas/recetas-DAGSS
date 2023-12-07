@@ -2,6 +2,7 @@ package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
+import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
 import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
 
@@ -40,7 +41,10 @@ public class CentroSaludService {
 
     }
 
-    public List<CentroSalud> buscarCentrosSaludDireccion(String direccion) {
+    /*tengo serias dudas sobre esto la verdad WIP*/
+    public List<CentroSalud> buscarCentrosSaludDireccion(String localidad) {
+        Direccion direccion = new Direccion();
+        direccion.setLocalidad(localidad);
         return centroSaludRepository.findAllByDireccion(direccion);
 
     }
@@ -65,6 +69,6 @@ public class CentroSaludService {
 
      public void eliminar(CentroSalud centroSalud) {
         centroSalud.setEstado(false);
-        centroSaludRepository.save(centroSalud);
+        centroSaludRepository.save(centroSalud  );
     }
 }
