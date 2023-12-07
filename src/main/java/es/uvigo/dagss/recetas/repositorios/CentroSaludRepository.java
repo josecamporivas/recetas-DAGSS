@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
+
 public interface CentroSaludRepository extends JpaRepository<CentroSalud, Long> {
     public List<CentroSalud> findAllByNombre(String nombre);
     public List<CentroSalud> findAllByDireccion(String direccion);

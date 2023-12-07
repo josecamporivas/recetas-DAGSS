@@ -20,9 +20,14 @@ public class CentroSaludService {
         return centroSaludRepository.save(centroSalud);
     }
 
-    public CentroSalud modificar(CentroSalud centroSalud) {
-        return centroSaludRepository.save(centroSalud);
+    /*
+     * Se mostrará una lista con los centros de salud actualmente registrados,
+     * indicando su datos esenciales (nombre, localidad, provincia, activo
+     * [true|false]).
+     */
 
+    public List<CentroSalud> getAll() {
+        return centroSaludRepository.findAll();
     }
 
     /*
@@ -38,5 +43,28 @@ public class CentroSaludService {
     public List<CentroSalud> buscarCentrosSaludDireccion(String direccion) {
         return centroSaludRepository.findAllByDireccion(direccion);
 
+    }
+
+    /*
+     * Se podrá seleccionar un centro de esa lista y mediante un botón Editar
+     * acceder a la edición de los datos del centro de salud seleccionado. Una vez
+     * completada esa edición se actualizará la lista de centros de salud.
+     */
+
+    public CentroSalud modificar(CentroSalud centroSalud) {
+        return centroSaludRepository.save(centroSalud);
+
+    }
+
+    /*
+     * Se podrá seleccionar un centro de esa lista y mediante un botón Borrar
+     * realizar la eliminación lógica de ese centro de salud en la aplicación,
+     * establiendo el valor de activo a false. Una vez completada esa edición se
+     * actualizará la lista de centros de salud.
+     */
+
+     public void eliminar(CentroSalud centroSalud) {
+        centroSalud.setEstado(false);
+        centroSaludRepository.save(centroSalud);
     }
 }

@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 public class AdministradorService {
     @Autowired
     private AdministradorRepository administradorRepository;
-    @Autowired
-    private CentroSaludRepository centroSaludRepository;
 
     /*
      * Se mostrará una lista con los administradores actualmente registrados,
