@@ -49,6 +49,11 @@ public class FarmaciaService {
      * lista de farmacias.
      */
 
+     public void eliminar(Farmacia farmacia){
+        farmacia.desactivar();
+        farmaciaRepository.save(farmacia);
+     }
+
      
 
 }
