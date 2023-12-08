@@ -1,0 +1,1 @@
+1. La historia de usuario "HU-M6. [Médico]" creo que es mejor implementarla en la capa Controller

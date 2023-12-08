@@ -2,6 +2,7 @@ package es.uvigo.dagss.recetas.servicios;
 
 import java.util.List;
 
+import es.uvigo.dagss.recetas.entidades.Prescripcion;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import es.uvigo.dagss.recetas.entidades.Cita;
@@ -36,12 +37,17 @@ public class CitaService {
         return citaRepository.findAllByPaciente(paciente);
     }
 
-    public List<Cita> buscarCitaMedico(Medico medico) {
+    public List<Cita> findAllByMedico(Medico medico) {
         return citaRepository.findAllByMedico(medico);
     }
 
     public Cita setAnulada(Cita cita) {
         cita.setEstado(TipoEstadoCita.ANULADA);
+        return citaRepository.save(cita);
+    }
+
+    public Cita setCompletada(Cita cita){
+        cita.setEstado(TipoEstadoCita.COMPLETADA);
         return citaRepository.save(cita);
     }
 
@@ -54,5 +60,8 @@ public class CitaService {
         return citaRepository.save(cita);
     }
 
-
+    /* WIP: no estoy seguro de como buscar por fecha de hoy  */
+    public List<Cita> findAllByMedicoForToday(Medico medico){
+        return citaRepository.findAllByMedicoAndFechaToday(medico);
+    }
 }

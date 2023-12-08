@@ -67,6 +67,10 @@ public class MedicoService {
      * no del servicio
      */
 
+    /*
+    *  un medico podrá modificar sus propios datos, menos las citas de su agenda y su centro de salud [HU-M10]
+    * */
+
     public Medico update(Medico medico) {
         return medicoRepository.save(medico);
     }
