@@ -27,7 +27,7 @@ public class AdministradorService {
      * administrador, asignándosele manualmente un password inicial. Una vez
      * completada esa edición se actualizará la lista de usuarios.
      */
-    public Administrador crear(Administrador administrador) {
+    public Administrador create(Administrador administrador) {
         return administradorRepository.save(administrador);
     }
 
@@ -37,7 +37,7 @@ public class AdministradorService {
      * datos del usuario seleccionado. Una vez completada esa edición se actualizará
      * la lista de usuarios.
      */
-    public Administrador modificar(Administrador administrador) {
+    public Administrador update(Administrador administrador) {
         return administradorRepository.save(administrador);
 
     }
@@ -49,7 +49,7 @@ public class AdministradorService {
      * Una vez completada esa edición se actualizará la lista de usuarios.
      */
     /* ?????????? Entiendo q su eliminación se haría mediante un edit */
-    public void eliminar(Administrador administrador) {
+    public void delete(Administrador administrador) {
         administrador.desactivar();
         administradorRepository.save(administrador);
     }

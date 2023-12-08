@@ -15,7 +15,7 @@ public class CentroSaludService {
     @Autowired
     private CentroSaludRepository centroSaludRepository;
 
-    public CentroSalud crear(CentroSalud centroSalud) {
+    public CentroSalud create(CentroSalud centroSalud) {
         return centroSaludRepository.save(centroSalud);
     }
 
@@ -34,17 +34,14 @@ public class CentroSaludService {
      * permitiéndose en todos estos casos búsquedas aproximadas (tipo LIKE en SQL)
      */
     /* no sé si buscarByName utiliza un like */
-    public List<CentroSalud> buscarCentrosSaludNombre(String nombre) {
+    public List<CentroSalud> findAllByNombre(String nombre) {
         return centroSaludRepository.findAllByNombre(nombre);
 
     }
 
     /*tengo serias dudas sobre esto la verdad WIP*/
-    public List<CentroSalud> buscarCentrosSaludDireccion(String localidad) {
-        Direccion direccion = new Direccion();
-        direccion.setLocalidad(localidad);
-        return centroSaludRepository.findAllByDireccion(direccion);
-
+    public List<CentroSalud> findAllByLocalidad(String localidad) {
+        return centroSaludRepository.findAllByDireccionLocalidad(localidad);
     }
 
     /*
@@ -53,7 +50,7 @@ public class CentroSaludService {
      * completada esa edición se actualizará la lista de centros de salud.
      */
 
-    public CentroSalud modificar(CentroSalud centroSalud) {
+    public CentroSalud update(CentroSalud centroSalud) {
         return centroSaludRepository.save(centroSalud);
 
     }
@@ -65,7 +62,7 @@ public class CentroSaludService {
      * actualizará la lista de centros de salud.
      */
 
-     public void eliminar(CentroSalud centroSalud) {
+     public void delete(CentroSalud centroSalud) {
         centroSalud.setEstado(false);
         centroSaludRepository.save(centroSalud  );
     }

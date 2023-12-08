@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import es.uvigo.dagss.recetas.entidades.Medicamento;
 import es.uvigo.dagss.recetas.repositorios.MedicamentoRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class MedicamentoService {
     @Autowired
     private MedicamentoRepository medicamentoRepository;
@@ -27,20 +29,20 @@ public class MedicamentoService {
      * aproximadas (tipo LIKE en SQL).
      */
 
-    public List<Medicamento> buscarMedicamentosNombreComercial(String nombre) {
-        return medicamentoRepository.findByNombre(nombre);
+    public List<Medicamento> findAllByNombre(String nombre) {
+        return medicamentoRepository.findAllByNombre(nombre);
     }
 
-    public List<Medicamento> buscarMedicamentosPrincipioActivo(String principioActivo) {
-        return medicamentoRepository.findByPrincipioActivo(principioActivo);
+    public List<Medicamento> findAllByPrincipioActivo(String principioActivo) {
+        return medicamentoRepository.findAllByPrincipioActivo(principioActivo);
     }
 
-    public List<Medicamento> buscarMedicamentosFabricante(String fabricante) {
-        return medicamentoRepository.findByFabricante(fabricante);
+    public List<Medicamento> findAllByFabricante(String fabricante) {
+        return medicamentoRepository.findAllByFabricante(fabricante);
     }
 
-    public List<Medicamento> buscarMedicamentosFamilia(String familia) {
-        return medicamentoRepository.findByFabricante(familia);
+    public List<Medicamento> findAllByFamilia(String familia) {
+        return medicamentoRepository.findAllByFamilia(familia);
     }
 
     /*
@@ -49,7 +51,7 @@ public class MedicamentoService {
      * completada esa edición se actualizará la lista de medicamentos.
      */
 
-    public Medicamento modificar(Medicamento medicamento) {
+    public Medicamento update(Medicamento medicamento) {
         return medicamentoRepository.save(medicamento);
     }
 
@@ -60,7 +62,7 @@ public class MedicamentoService {
      * actualizará la lista de medicamentos.
      */
 
-    public void eliminar(Medicamento medicamento) {
+    public void delete(Medicamento medicamento) {
         medicamento.setEstado(false);
         medicamentoRepository.save(medicamento);
     }
@@ -70,7 +72,7 @@ public class MedicamentoService {
      * Una vez completada esa edición se actualizará la lista de medicamentos.
      */
 
-     public Medicamento crear(Medicamento medicamento){
+     public Medicamento create(Medicamento medicamento){
         return medicamentoRepository.save(medicamento);
      }
 }

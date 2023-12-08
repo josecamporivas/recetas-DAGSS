@@ -13,6 +13,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
     public Paciente getByLoginAndPassword(String login, String password);
     public List<Paciente> findBynombreCompleto(Nombre nombreCompleto);
-    public List<Paciente> findByDireccion(Direccion direccion);
+    public List<Paciente> findByDireccionLocalidad(String localidad);
     public List<Paciente> findByMedicoAsignado(Medico medicoAsignado);
+    public List<Paciente> findAllByMedicoAsignadoIn(List<Medico> medicos);
 }

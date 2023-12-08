@@ -3,6 +3,7 @@ package es.uvigo.dagss.recetas.servicios;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
+import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
 import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class MedicoService {
 
     @Autowired
     private MedicoRepository medicoRepository;
+
+    @Autowired
+    private CentroSaludRepository centroSaludRepository;
 
     /*
      * Se mostrará una lista con los médicos actualmente registrados, indicando su
@@ -36,27 +40,23 @@ public class MedicoService {
      * el mismo método, siendo la misma llamada para ambas
      */
 
-    public List<Medico> buscarMedicosNombre(Nombre nombre) {
+    public List<Medico> findAllByNombre(Nombre nombre) {
         return medicoRepository.findByNombreCompleto(nombre);
     }
 
-    public List<Medico> buscarMedicosNombre(Nombre nombre, CentroSalud centroSalud) {
+    public List<Medico> findByNombreCompletoAndCentroSalud(Nombre nombre, CentroSalud centroSalud) {
         return medicoRepository.findByNombreCompletoAndCentroSalud(nombre, centroSalud);
     }
+
     /*
      * NO LOGRO ENTENDER CÓMO REALIZAR LA BÚSQUEDA UTILIZANDO UN CAMPO DE UN OBJETO
      * AL QUE ESTÁ RELACIONADO WIP.
      */
-    /*
-     * public List<Medico> buscarMedicosLocalidad(String nombre) {
-     * return medicoRepository.findByNombreCompleto(nombre);
-     * }
-     * public List<Medico> buscarMedicosLocalidad(Nombre nombre,CentroSalud
-     * centroSalud) {
-     * return
-     * medicoRepository.findByNombreCompletoAndCentroSalud(nombre,centroSalud);
-     * }
-     */
+    public List<Medico> findByDireccionLocalidad(String localidad){
+        List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidad(localidad);
+
+        return medicoRepository.findAllByCentroSaludIn(centroSaludList);
+    }
 
     /*
      * Se podrá seleccionar un médico de esa lista y mediante un botón Editar
@@ -67,7 +67,7 @@ public class MedicoService {
      * no del servicio
      */
 
-    public Medico modificar(Medico medico) {
+    public Medico update(Medico medico) {
         return medicoRepository.save(medico);
     }
 
@@ -78,7 +78,7 @@ public class MedicoService {
      * lista de médicos.
      */
 
-    public void eliminar(Medico medico) {
+    public void delete(Medico medico) {
         medico.desactivar();
         medicoRepository.save(medico);
     }
@@ -90,7 +90,9 @@ public class MedicoService {
      * de médicos.
      */
 
-    public Medico crear(Medico medico) {
+    public Medico create(Medico medico) {
         return medicoRepository.save(medico);
     }
+
+
 }

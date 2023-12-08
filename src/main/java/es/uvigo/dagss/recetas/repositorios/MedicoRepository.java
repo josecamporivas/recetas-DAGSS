@@ -14,4 +14,6 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     public Medico findByNumColegiado(String numColegiado);
     public List<Medico> findByNombreCompleto(Nombre nombreCompleto);
     public List<Medico> findByNombreCompletoAndCentroSalud(Nombre nombreCompleto,CentroSalud centroSalud);
+
+    public List<Medico> findAllByCentroSaludIn(List<CentroSalud> centroSaludList);
 }

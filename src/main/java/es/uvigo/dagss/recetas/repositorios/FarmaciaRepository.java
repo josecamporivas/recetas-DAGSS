@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FarmaciaRepository extends JpaRepository<Farmacia, Long> {
     public Farmacia getByLoginAndPassword(String login, String password);
-    public List<Farmacia> findByNombreFarmacia(String nombreFarmacia);
+    public List<Farmacia> findAllByNombreFarmacia(String nombreFarmacia);
 }

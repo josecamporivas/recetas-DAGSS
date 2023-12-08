@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CitaRepository extends JpaRepository<Cita, Long> {
    
-    public List<Cita> findByPaciente(Paciente paciente);
-    public List<Cita> findByMedico(Medico medico);
-
+    public List<Cita> findAllByPaciente(Paciente paciente);
+    public List<Cita> findAllByMedico(Medico medico);
 }

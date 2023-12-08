@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,5 +25,8 @@ public class CentroSalud implements Serializable {
     private String email;
 
     private Boolean estado;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Medico> medicos;
 
 }

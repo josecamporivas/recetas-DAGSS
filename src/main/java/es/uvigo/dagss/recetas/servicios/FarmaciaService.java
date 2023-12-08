@@ -28,8 +28,8 @@ public class FarmaciaService {
      * LIKE en SQL).
      */
 
-    public List<Farmacia> buscarFarmaciasNombre(String nombreFarmacia) {
-        return farmaciaRepository.findByNombreFarmacia(nombreFarmacia);
+    public List<Farmacia> findAllByNombreFarmacia(String nombreFarmacia) {
+        return farmaciaRepository.findAllByNombreFarmacia(nombreFarmacia);
     }
 
     /*
@@ -38,7 +38,7 @@ public class FarmaciaService {
      * completada esa edición se actualizará la lista de farmacias.
      */
 
-    public Farmacia editar(Farmacia farmacia) {
+    public Farmacia update(Farmacia farmacia) {
         return farmaciaRepository.save(farmacia);
     }
 
@@ -49,7 +49,7 @@ public class FarmaciaService {
      * lista de farmacias.
      */
 
-     public void eliminar(Farmacia farmacia){
+     public void delete(Farmacia farmacia){
         farmacia.desactivar();
         farmaciaRepository.save(farmacia);
      }

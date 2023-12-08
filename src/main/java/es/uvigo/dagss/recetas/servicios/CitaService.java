@@ -9,7 +9,9 @@ import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoCita;
 import es.uvigo.dagss.recetas.repositorios.CitaRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CitaService {
 
     @Autowired
@@ -20,7 +22,6 @@ public class CitaService {
      * registradas, indicando su datos esenciales (paciente, médico, centro de
      * salud, fecha y hora, estado).
      */
-
     public List<Cita> getAll() {
         return citaRepository.findAll();
     }
@@ -31,16 +32,15 @@ public class CitaService {
      * (seleccionándose ambos de una lista).
      * Entiendo que se refiere a que filtras x médico o paciente
      */
-
-    public List<Cita> buscarCitaPaciente(Paciente paciente) {
-        return citaRepository.findByPaciente(paciente);
+    public List<Cita> findByPaciente(Paciente paciente) {
+        return citaRepository.findAllByPaciente(paciente);
     }
 
     public List<Cita> buscarCitaMedico(Medico medico) {
-        return citaRepository.findByMedico(medico);
+        return citaRepository.findAllByMedico(medico);
     }
 
-    public Cita anular(Cita cita) {
+    public Cita setAnulada(Cita cita) {
         cita.setEstado(TipoEstadoCita.ANULADA);
         return citaRepository.save(cita);
     }
@@ -50,8 +50,9 @@ public class CitaService {
      * administradores.
      * No x los admins pero sí x otro así q lo creo ya
      */
-
-    public Cita crear(Cita cita) {
+    public Cita create(Cita cita) {
         return citaRepository.save(cita);
     }
+
+
 }

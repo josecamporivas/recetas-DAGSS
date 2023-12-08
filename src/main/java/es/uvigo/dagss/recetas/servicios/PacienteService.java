@@ -5,6 +5,7 @@ import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
+import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
 
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ public class PacienteService {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private MedicoRepository medicoRepository;
 
     /*
      * Se mostrará una lista con los pacientes actualmente registrados, indicando su
@@ -33,14 +37,12 @@ public class PacienteService {
      * La lista de pacientes podrá filtrarse por nombre o por localidad,
      * permitiéndose en todos estos casos búsquedas aproximadas (tipo LIKE en SQL).
      */
-    public List<Paciente> buscarPacientesNombre(Nombre nombre) {
+    public List<Paciente> findAllByNombreCompleto(Nombre nombre) {
         return pacienteRepository.findBynombreCompleto(nombre);
     }
 
-    public List<Paciente> buscarPacientesLocalidad(String localidad) {
-        Direccion direccion = new Direccion();
-        direccion.setLocalidad(localidad);
-        return pacienteRepository.findByDireccion(direccion);
+    public List<Paciente> findAllByLocalidad(String localidad) {
+        return pacienteRepository.findByDireccionLocalidad(localidad);
     }
 
     /*
@@ -51,11 +53,15 @@ public class PacienteService {
      * indicado).
      */
     /* Sé que se obtiene tras obtener el médico peeero ns cómo se hace eso xd WIP */
-    public List<Paciente> buscarPacientesCentroSalud(CentroSalud centroSalud) {
-        return new ArrayList<>();
+    public List<Paciente> findAllByCentroSalud(CentroSalud centroSalud) {
+        List<CentroSalud> centroSaludList = new ArrayList<>();
+        centroSaludList.add(centroSalud);
+        List<Medico> medicoList = medicoRepository.findAllByCentroSaludIn(centroSaludList);
+
+        return pacienteRepository.findAllByMedicoAsignadoIn(medicoList);
     }
 
-    public List<Paciente> buscarPacientesMedico(Medico medico) {
+    public List<Paciente> findAllByMedico(Medico medico) {
         return pacienteRepository.findByMedicoAsignado(medico);
     }
 
@@ -67,7 +73,7 @@ public class PacienteService {
      * lista de médicos.
      */
 
-    public Paciente modificar(Paciente paciente) {
+    public Paciente update(Paciente paciente) {
         return pacienteRepository.save(paciente);
     }
 
@@ -77,7 +83,7 @@ public class PacienteService {
      * el valor de activo a false. Una vez completada esa edición se actualizará la
      * lista de pacientes.
      */
-    public void eliminar(Paciente paciente) {
+    public void delete(Paciente paciente) {
         paciente.desactivar();
         pacienteRepository.save(paciente);
     }
@@ -89,7 +95,7 @@ public class PacienteService {
      * se actualizará la lista de pacientes.
      */
 
-    public Paciente crear(Paciente paciente) {
+    public Paciente create(Paciente paciente) {
         return pacienteRepository.save(paciente);
     }
 }
