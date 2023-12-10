@@ -72,7 +72,9 @@ public class PacienteService {
      * corresponde a ese paciente. Una vez completada esa edición se actualizará la
      * lista de médicos.
      */
-
+    /*  HU-P5: un paciente puede modificar: contraseña y datos básicos (nombre, direccion, telefono,...).
+     *         Pero no centro de salud y medico
+     */
     public Paciente update(Paciente paciente) {
         return pacienteRepository.save(paciente);
     }

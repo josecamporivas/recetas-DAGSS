@@ -55,6 +55,8 @@ public class CitaService {
      * No se contempla, de momento, la creación manual de citas por parte de los
      * administradores.
      * No x los admins pero sí x otro así q lo creo ya
+     *
+     * Los pacientes son los crean las citas, las citas tienen que tener asociadas el medico del paciente
      */
     public Cita create(Cita cita) {
         return citaRepository.save(cita);

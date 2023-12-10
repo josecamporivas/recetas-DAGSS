@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -25,10 +26,10 @@ public class Cita implements Serializable {
     private Integer duracion;
 
     @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private LocalDateTime fecha;
 
     @Temporal(TemporalType.TIME)
-    private Date hora;
+    private LocalDateTime hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)

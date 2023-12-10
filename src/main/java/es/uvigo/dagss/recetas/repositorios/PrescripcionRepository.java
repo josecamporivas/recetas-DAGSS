@@ -12,4 +12,6 @@ public interface PrescripcionRepository extends JpaRepository<Prescripcion, Long
 
     @Query("select p from Prescripcion p where p.paciente = :paciente and p.fechaFinal >= CURRENT_DATE order by p.fechaInicio")
     public List<Prescripcion> findAllByPacienteAndEnVigor(@Param("paciente") Paciente paciente);
+
+    public List<Prescripcion> findAllByPacienteAndEstado(Paciente paciente, boolean estado);
 }

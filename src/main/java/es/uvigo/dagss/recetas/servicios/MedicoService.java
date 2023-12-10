@@ -1,11 +1,17 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
+import es.uvigo.dagss.recetas.entidades.Cita;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
+import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoCita;
 import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
+import es.uvigo.dagss.recetas.repositorios.CitaRepository;
 import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +25,9 @@ public class MedicoService {
 
     @Autowired
     private CentroSaludRepository centroSaludRepository;
+
+    @Autowired
+    private CitaRepository citaRepository;
 
     /*
      * Se mostrará una lista con los médicos actualmente registrados, indicando su
@@ -98,5 +107,34 @@ public class MedicoService {
         return medicoRepository.save(medico);
     }
 
+
+    /*  WIP: metodo con muchas probabilidades de no funcionar  */
+    public List<LocalDateTime> findFreeSpaceSchedule(Medico medico, LocalDateTime day){
+        LocalDateTime inicio = day.withHour(8).withMinute(30).withSecond(0).withNano(0);
+        LocalDateTime fin = day.withHour(15).withMinute(30).withSecond(0).withNano(0);
+
+        List<Cita> citas = citaRepository.findAllByMedicoAndFechaAndHoraBetweenAndEstado(medico, day, inicio, fin, TipoEstadoCita.PLANIFICADA);
+
+        List<LocalDateTime> huecosDisponibles = new ArrayList<>();
+
+        LocalDateTime actual = inicio;
+        while (actual.isBefore(fin)) {
+            boolean hayCita = false;
+            for(Cita cita: citas){
+               if(cita.getFecha().isEqual(actual)){
+                   hayCita = true;
+                   break;
+               }
+            }
+
+            if (!hayCita) {
+                huecosDisponibles.add(actual);
+            }
+
+            actual = actual.plusMinutes(15);
+        }
+
+        return huecosDisponibles;
+    }
 
 }
