@@ -26,10 +26,10 @@ public class Cita implements Serializable {
     private Integer duracion;
 
     @Temporal(TemporalType.DATE)
-    private LocalDateTime fecha;
+    private Date fecha;
 
     @Temporal(TemporalType.TIME)
-    private LocalDateTime hora;
+    private Date hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)

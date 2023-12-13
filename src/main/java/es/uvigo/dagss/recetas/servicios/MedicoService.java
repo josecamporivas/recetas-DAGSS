@@ -121,7 +121,7 @@ public class MedicoService {
         while (actual.isBefore(fin)) {
             boolean hayCita = false;
             for(Cita cita: citas){
-               if(cita.getFecha().isEqual(actual)){
+               if(cita.getFecha().equals(actual)){
                    hayCita = true;
                    break;
                }
