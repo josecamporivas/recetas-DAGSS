@@ -10,4 +10,5 @@ import java.util.List;
 public interface RecetaRepository extends JpaRepository<Receta, Long> {
     public List<Receta> findAllByPrescripcion(Prescripcion prescripcion);
     public List<Receta> findAllByPrescripcionAndEstado(Prescripcion prescripcion, TipoEstadoReceta estadoReceta);
+    public List<Receta> findAllByPrescripcionPacienteNumTarjetaSanitaria(String numTarjetaSanitaria);
 }
