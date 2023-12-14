@@ -35,8 +35,10 @@ public class AdministradorController {
     private AdministradorService administradorService;
 
     @GetMapping
-    public List<Administrador> getAll() {
-        return administradorService.getAll();
+    public ResponseEntity<List<Administrador>> getAll() {
+        List<Administrador> result = new ArrayList<>();
+        result = administradorService.getAll();
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")

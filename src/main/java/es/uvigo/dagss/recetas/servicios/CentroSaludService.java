@@ -1,10 +1,10 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
-import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,10 @@ public class CentroSaludService {
 
     public List<CentroSalud> getAll() {
         return centroSaludRepository.findAll();
+    }
+
+     public Optional<CentroSalud> findById(Long id) {
+        return centroSaludRepository.findById(id);
     }
 
     /*
