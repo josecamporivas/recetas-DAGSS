@@ -4,6 +4,7 @@ import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,10 @@ public class AdministradorService {
      */
     public List<Administrador> getAll() {
         return administradorRepository.findAll();
+    }
+
+    public Optional<Administrador> findById(Long id) {
+        return administradorRepository.findById(id);
     }
 
     /*
