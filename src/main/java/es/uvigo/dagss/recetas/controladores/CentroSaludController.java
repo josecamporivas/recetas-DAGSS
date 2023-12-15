@@ -86,7 +86,7 @@ public class CentroSaludController {
 		}
     }
 
-    @DeleteMapping(path = "{id}")
+    @PutMapping(path = "/deactivate/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {

@@ -60,7 +60,8 @@ public class CitaController {
         result = citaService.findAllByMedicoForToday(medico);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    @DeleteMapping(path = "{id}")
+
+    @PutMapping(path = "/deactivate/{id}")
     public ResponseEntity<HttpStatus> setAnulada(@PathVariable("id") Long id) {
         Optional<Cita> cita = citaService.findById(id);
         if (cita.isEmpty()) {

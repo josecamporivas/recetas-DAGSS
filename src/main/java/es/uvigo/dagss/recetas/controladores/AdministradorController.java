@@ -71,7 +71,7 @@ public class AdministradorController {
 		}
     }
 
-    @DeleteMapping(path = "{id}")
+    @PutMapping(path = "/deactivate/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<Administrador> admin = administradorService.findById(id);
         if (admin.isEmpty()) {
