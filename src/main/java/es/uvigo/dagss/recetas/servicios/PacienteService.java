@@ -3,8 +3,6 @@ package es.uvigo.dagss.recetas.servicios;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
-import es.uvigo.dagss.recetas.entidades.Receta;
-import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
 import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 import es.uvigo.dagss.recetas.repositorios.PacienteRepository;

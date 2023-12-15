@@ -1,8 +1,8 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import java.util.List;
+import java.util.Optional;
 
-import es.uvigo.dagss.recetas.entidades.Prescripcion;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import es.uvigo.dagss.recetas.entidades.Cita;
@@ -25,6 +25,10 @@ public class CitaService {
      */
     public List<Cita> getAll() {
         return citaRepository.findAll();
+    }
+
+     public Optional<Cita> findById(Long id) {
+        return citaRepository.findById(id);
     }
 
     /*

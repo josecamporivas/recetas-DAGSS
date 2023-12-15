@@ -11,8 +11,8 @@ import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,10 @@ public class MedicoService {
         return medicoRepository.findAll();
 
     }
+
+    public Optional<Medico> findById(Long id) {
+        return medicoRepository.findById(id);
+    }
     /*
      * La lista de médicos podrá filtrarse por nombre o por localidad, permitiéndose
      * en todos estos casos búsquedas aproximadas (tipo LIKE en SQL).
@@ -61,7 +65,7 @@ public class MedicoService {
      * NO LOGRO ENTENDER CÓMO REALIZAR LA BÚSQUEDA UTILIZANDO UN CAMPO DE UN OBJETO
      * AL QUE ESTÁ RELACIONADO WIP.
      */
-    public List<Medico> findByDireccionLocalidad(String localidad){
+    public List<Medico> findByDireccionLocalidad(String localidad) {
         List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidad(localidad);
 
         return medicoRepository.findAllByCentroSaludIn(centroSaludList);
@@ -77,8 +81,9 @@ public class MedicoService {
      */
 
     /*
-    *  un medico podrá modificar sus propios datos, menos las citas de su agenda y su centro de salud [HU-M10]
-    * */
+     * un medico podrá modificar sus propios datos, menos las citas de su agenda y
+     * su centro de salud [HU-M10]
+     */
 
     public Medico update(Medico medico) {
         return medicoRepository.save(medico);
@@ -107,24 +112,24 @@ public class MedicoService {
         return medicoRepository.save(medico);
     }
 
-
-    /*  WIP: metodo con muchas probabilidades de no funcionar  */
-    public List<LocalDateTime> findFreeSpaceSchedule(Medico medico, LocalDateTime day){
+    /* WIP: metodo con muchas probabilidades de no funcionar */
+    public List<LocalDateTime> findFreeSpaceSchedule(Medico medico, LocalDateTime day) {
         LocalDateTime inicio = day.withHour(8).withMinute(30).withSecond(0).withNano(0);
         LocalDateTime fin = day.withHour(15).withMinute(30).withSecond(0).withNano(0);
 
-        List<Cita> citas = citaRepository.findAllByMedicoAndFechaAndHoraBetweenAndEstado(medico, day, inicio, fin, TipoEstadoCita.PLANIFICADA);
+        List<Cita> citas = citaRepository.findAllByMedicoAndFechaAndHoraBetweenAndEstado(medico, day, inicio, fin,
+                TipoEstadoCita.PLANIFICADA);
 
         List<LocalDateTime> huecosDisponibles = new ArrayList<>();
 
         LocalDateTime actual = inicio;
         while (actual.isBefore(fin)) {
             boolean hayCita = false;
-            for(Cita cita: citas){
-               if(cita.getFecha().equals(actual)){
-                   hayCita = true;
-                   break;
-               }
+            for (Cita cita : citas) {
+                if (cita.getFecha().equals(actual)) {
+                    hayCita = true;
+                    break;
+                }
             }
 
             if (!hayCita) {

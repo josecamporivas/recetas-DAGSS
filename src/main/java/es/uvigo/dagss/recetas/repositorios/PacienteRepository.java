@@ -2,7 +2,6 @@ package es.uvigo.dagss.recetas.repositorios;
 
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
-import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
 
 import java.util.List;
