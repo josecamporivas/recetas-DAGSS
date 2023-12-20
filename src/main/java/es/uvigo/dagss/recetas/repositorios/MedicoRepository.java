@@ -16,4 +16,5 @@ public interface MedicoRepository extends JpaRepository<Medico, Long> {
     public List<Medico> findByNombreCompletoAndCentroSalud(Nombre nombreCompleto,CentroSalud centroSalud);
 
     public List<Medico> findAllByCentroSaludIn(List<CentroSalud> centroSaludList);
+    public List<Medico> findAllByCentroSalud_IdCentro(Long centroSaludId);
 }

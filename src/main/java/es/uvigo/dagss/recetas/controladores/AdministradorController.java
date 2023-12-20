@@ -32,8 +32,7 @@ public class AdministradorController {
 
     @GetMapping
     public ResponseEntity<List<Administrador>> getAll() {
-        List<Administrador> result = new ArrayList<>();
-        result = administradorService.getAll();
+        List<Administrador> result = administradorService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

@@ -9,6 +9,7 @@ import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,16 @@ public class PacienteService {
         return pacienteRepository.findAll();
      }
 
+     public Optional<Paciente> findById(Long id){
+        return pacienteRepository.findById(id);
+     }
+
     /*
      * La lista de pacientes podrá filtrarse por nombre o por localidad,
      * permitiéndose en todos estos casos búsquedas aproximadas (tipo LIKE en SQL).
      */
-    public List<Paciente> findAllByNombreCompleto(Nombre nombre) {
-        return pacienteRepository.findBynombreCompleto(nombre);
+    public List<Paciente> findAllByNombreCompleto(String nombre) {
+        return pacienteRepository.findByNombreCompleto(nombre);
     }
 
     public List<Paciente> findAllByLocalidad(String localidad) {
@@ -52,16 +57,14 @@ public class PacienteService {
      * indicado).
      */
     /* Sé que se obtiene tras obtener el médico peeero ns cómo se hace eso xd WIP */
-    public List<Paciente> findAllByCentroSalud(CentroSalud centroSalud) {
-        List<CentroSalud> centroSaludList = new ArrayList<>();
-        centroSaludList.add(centroSalud);
-        List<Medico> medicoList = medicoRepository.findAllByCentroSaludIn(centroSaludList);
+    public List<Paciente> findAllByCentroSalud(Long centroSaludId) {
+        List<Medico> medicoList = medicoRepository.findAllByCentroSalud_IdCentro(centroSaludId);
 
         return pacienteRepository.findAllByMedicoAsignadoIn(medicoList);
     }
 
-    public List<Paciente> findAllByMedico(Medico medico) {
-        return pacienteRepository.findByMedicoAsignado(medico);
+    public List<Paciente> findAllByMedico(Long medicoId) {
+        return pacienteRepository.findByMedicoAsignadoId(medicoId);
     }
 
     /*
