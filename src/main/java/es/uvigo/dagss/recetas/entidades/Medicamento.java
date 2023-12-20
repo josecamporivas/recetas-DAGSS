@@ -14,7 +14,6 @@ public class Medicamento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMedicamento;
 
-    @Column(nullable = false)
     private String nombre;
 
     private String principioActivo;
@@ -23,7 +22,6 @@ public class Medicamento implements Serializable {
 
     private String familia;
 
-    @Column(nullable = false)
     private Integer dosis;
 
     public Boolean estado;

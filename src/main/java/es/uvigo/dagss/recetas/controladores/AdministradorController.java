@@ -50,7 +50,6 @@ public class AdministradorController {
     }
 
     //duda. aqui el profesor usa @valid, a mi me da error porque import jakarta.validation.Valid; tp va
-
     @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Administrador> create(@RequestBody Administrador administrador) {
         Administrador newAdministrador = administradorService.create(administrador);
@@ -59,10 +58,10 @@ public class AdministradorController {
 		return ResponseEntity.created(uri).body(administrador);
     }
 
-    @PutMapping(path = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Administrador> update(@PathVariable("id") Long id, @RequestBody Administrador administrador) {
         Optional<Administrador> optionalAdministrador = administradorService.findById(id);
-
+        administrador.setId(id);
 		if (optionalAdministrador.isEmpty()) {
             throw new RuntimeException("No existe el administrador con id " + id);
 		} else {
@@ -71,19 +70,16 @@ public class AdministradorController {
 		}
     }
 
-    @PutMapping(path = "/deactivate/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<Administrador> admin = administradorService.findById(id);
         if (admin.isEmpty()) {
-
             throw new RuntimeException("No existe el administrador con id " + id);
         } else {
             administradorService.delete(admin.get());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
         }
     }
-
 
     private URI createAdminstradorUri(Administrador administrador) {
 		return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(administrador.getId())

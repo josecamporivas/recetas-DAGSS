@@ -28,7 +28,6 @@ public class Paciente extends Usuario {
     private Date fechaNac;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
     private Medico medicoAsignado; //El centro de salud asociado se obtiene a partir del médico
 
     public Paciente() {

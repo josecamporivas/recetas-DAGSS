@@ -33,8 +33,7 @@ public class CentroSaludController {
 
     @GetMapping
     public ResponseEntity<List<CentroSalud>> getAll() {
-        List<CentroSalud> result = new ArrayList<>();
-        result = centroSaludService.getAll();
+        List<CentroSalud> result = centroSaludService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
@@ -51,7 +50,6 @@ public class CentroSaludController {
     public ResponseEntity<CentroSalud> getById(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {
-
             throw new RuntimeException("No existe el centro de salud con id " + id);
         } else {
             return new ResponseEntity<>(centroSalud.get(), HttpStatus.OK);
@@ -60,21 +58,21 @@ public class CentroSaludController {
     }
 
     // esto no se si estará bien o no, quiero pensar que sí. No sé exactamente pq él usa requestMapping en vez de getMapping
-    @RequestMapping(params = "nombre", method = RequestMethod.GET)
+    @GetMapping(params = "nombre")
     public ResponseEntity<List<CentroSalud>> findAllByNombre(@RequestParam(name = "nombre", required = true) String nombre) {
         List<CentroSalud> centrosSalud = centroSaludService.findAllByNombre(nombre);
 
         return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
     }
 
-    @RequestMapping(params = "localidad", method = RequestMethod.GET)
+    @GetMapping(params = "localidad")
     public ResponseEntity<List<CentroSalud>> findAllByLocalidad(@RequestParam(name = "localidad", required = true) String localidad) {
         List<CentroSalud> centrosSalud = centroSaludService.findAllByLocalidad(localidad);
 
         return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
     }
     
-    @PutMapping(path = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CentroSalud> update(@PathVariable("id") Long id, @RequestBody CentroSalud centroSalud) {
         Optional<CentroSalud> optionalCentroSalud = centroSaludService.findById(id);
 
@@ -90,12 +88,10 @@ public class CentroSaludController {
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {
-
-            throw new RuntimeException("No existe el administrador con id " + id);
+            throw new RuntimeException("No existe el administrador con id " + id); //TODO: handle exceptions
         } else {
             centroSaludService.delete(centroSalud.get());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
         }
     }
 
@@ -103,5 +99,4 @@ public class CentroSaludController {
 		return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(centroSalud.getIdCentro())
 				.toUri();
 	}
-    
 }

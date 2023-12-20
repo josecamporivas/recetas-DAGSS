@@ -11,7 +11,7 @@ import lombok.Setter;
 @DiscriminatorValue(value = "MEDICO")
 public class Medico extends Usuario {
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String numColegiado;
 
     @Column(unique = true)
@@ -22,5 +22,12 @@ public class Medico extends Usuario {
 
     public Medico() {
         super(TipoUsuario.MEDICO);
+    }
+
+    public Medico(String numColegiado, Integer telefono, CentroSalud centroSalud) {
+        super(TipoUsuario.MEDICO);
+        this.numColegiado = numColegiado;
+        this.telefono = telefono;
+        this.centroSalud = centroSalud;
     }
 }

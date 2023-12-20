@@ -20,14 +20,12 @@ public class Receta implements Serializable {
     private Date fechaValidezInicial;
 
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
     private Date fechaValidezFinal;
 
     @Column(columnDefinition = "varchar(32) DEFAULT 'PLANIFICADA'")
     private TipoEstadoReceta estado = TipoEstadoReceta.PLANIFICADA;
 
-    @Column(nullable = false)
-    private Integer numUnidades; //DUDA: no se si ponerle un rango. NO se como poner un rango
+    private Integer numUnidades;
 
     @ManyToOne
     private Prescripcion prescripcion;

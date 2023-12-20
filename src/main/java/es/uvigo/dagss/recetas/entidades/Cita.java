@@ -31,11 +31,9 @@ public class Cita implements Serializable {
     private Date hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
     private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
     private Medico medico;
 
 }

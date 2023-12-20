@@ -14,10 +14,8 @@ import lombok.Setter;
 @DiscriminatorValue(value = "FARMACIA")
 public class Farmacia extends Usuario {
 
-    @Column(nullable = false)
     private String nombreFarmacia;
 
-    @Column(nullable = false)
     private String numColegiadoFarmaceutico;
 
     private Direccion direccion;

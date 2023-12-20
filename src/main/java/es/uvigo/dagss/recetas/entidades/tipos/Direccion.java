@@ -14,4 +14,7 @@ public class Direccion implements Serializable {
     private String provincia;
     private Integer cp;
     private String localidad;
+
+    public Direccion() {
+    }
 }

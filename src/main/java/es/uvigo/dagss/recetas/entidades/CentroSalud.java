@@ -29,4 +29,13 @@ public class CentroSalud implements Serializable {
     @OneToMany(fetch = FetchType.LAZY)
     private List<Medico> medicos;
 
+    public CentroSalud() {
+    }
+    public CentroSalud(String nombre, Direccion direccion, String email, Boolean estado, List<Medico> medicos) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.email = email;
+        this.estado = estado;
+        this.medicos = medicos;
+    }
 }

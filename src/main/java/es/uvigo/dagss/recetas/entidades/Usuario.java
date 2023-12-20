@@ -33,22 +33,18 @@ public abstract class Usuario implements Serializable {
     private Long id;
 
 	@Column(length = 9)
-	protected String DNI;		//DUDA: no se si hacerlo unico
+	protected String DNI;
 
-	//@Column(nullable = false)
 	protected Nombre nombreCompleto;
 
-	//@Column(nullable = false)
-	protected String email; //DUDA: no se si ponerle unico
+	protected String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_USUARIO", length = 20)
     protected TipoUsuario tipo;
 
-	@Column(nullable = false)
     private String login;
 
-	@Column(nullable = false)
     private String password;
 
     @Temporal(TemporalType.TIMESTAMP)
