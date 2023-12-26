@@ -61,7 +61,7 @@ public class CitaController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PutMapping(path = "/deactivate/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> setAnulada(@PathVariable("id") Long id) {
         Optional<Cita> cita = citaService.findById(id);
         if (cita.isEmpty()) {
