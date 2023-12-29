@@ -1,18 +1,18 @@
 package es.uvigo.dagss.recetas;
 
-import es.uvigo.dagss.recetas.entidades.Administrador;
-import es.uvigo.dagss.recetas.entidades.CentroSalud;
-import es.uvigo.dagss.recetas.entidades.Medico;
+import es.uvigo.dagss.recetas.entidades.*;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
-import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
-import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
-import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
+import es.uvigo.dagss.recetas.repositorios.*;
+import org.hibernate.type.descriptor.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Arrays;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.ParseException;
+import java.util.List;
 
 @SpringBootApplication
 public class RecetasApplication implements CommandLineRunner {
@@ -26,6 +26,14 @@ public class RecetasApplication implements CommandLineRunner {
 	@Autowired
 	private CentroSaludRepository centroSaludRepository;
 
+	@Autowired
+	private FarmaciaRepository farmaciaRepository;
+
+	@Autowired
+	private PacienteRepository pacienteRepository;
+
+	@Autowired
+	private CitaRepository citaRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(RecetasApplication.class, args);
@@ -36,28 +44,57 @@ public class RecetasApplication implements CommandLineRunner {
 		crearDatosEjemplo();
 	}
 
-	private void crearDatosEjemplo(){
+	private void crearDatosEjemplo() throws ParseException {
+
+		//ADMINISTRADORES
 		Administrador admin = new Administrador("admin1", "admin1");
 		administradorRepository.save(admin);
 
+		//MEDICOS
 		Medico medico1 = new Medico("123", 123, null);
 		Medico medico2 = new Medico("1234", 1234, null);
+		Medico medico3 = new Medico("12345", 12345, null);
 		medicoRepository.save(medico1);
 		medicoRepository.save(medico2);
+		medicoRepository.save(medico3);
 
-		CentroSalud centroSalud1 = new CentroSalud("centroSalud1" , new Direccion(),
-				"centrosalud1@gmail.com", true, Arrays.asList(medico1));
-		CentroSalud centroSalud2 = new CentroSalud("centroSalud2" , new Direccion(),
-				"centrosalud2@gmail.com", true, Arrays.asList(medico2));
+		//CENTROS DE SALUD
+		CentroSalud centroSalud1 = new CentroSalud("centroSalud1" , new Direccion("Avenida CentroSalud 1", "Ourense", 32004, "Ourense"),
+				"centrosalud1@gmail.com", List.of(medico1));
+		CentroSalud centroSalud2 = new CentroSalud("centroSalud2" , new Direccion("Avenida CentroSalud 2", "Ourense", 32004, "Ourense"),
+				"centrosalud2@gmail.com", List.of(medico2));
+		CentroSalud centroSalud3 = new CentroSalud("centroSalud3" , new Direccion("Avenida CentroSalud 3", "Pontevedra", 32004, "Pontevedra"),
+				"centrosalud3@gmail.com", List.of(medico3));
 		centroSaludRepository.save(centroSalud1);
 		centroSaludRepository.save(centroSalud2);
+		centroSaludRepository.save(centroSalud3);
 
+		//ASIGNAR CENTROS DE SALUD A MEDICOS
 		medico1.setCentroSalud(centroSalud1);
 		medico2.setCentroSalud(centroSalud2);
+		medico3.setCentroSalud(centroSalud3);
 		medicoRepository.save(medico1);
 		medicoRepository.save(medico2);
+		medicoRepository.save(medico3);
 
+		//PACIENTES
+		Paciente paciente1 = new Paciente("1234567", "123", new Direccion("Avenida Paciente 1", "Ourense", 32004, "Ourense"), 986998877, Date.valueOf("2000-01-01"));
+		Paciente paciente2 = new Paciente("7654321", "1234", new Direccion("Avenida Paciente 2", "Ourense", 32004, "Ourense"), 986998877, Date.valueOf("2000-02-02"));
+		paciente1.setMedicoAsignado(medico1);
+		paciente2.setMedicoAsignado(medico2);
+		pacienteRepository.save(paciente1);
+		pacienteRepository.save(paciente2);
 
+		//CITAS
+		Cita cita1 = new Cita(Date.valueOf("2024-01-01"), Time.valueOf("10:00:00"), paciente1, medico1);
+		Cita cita2 = new Cita(Date.valueOf("2024-02-02"), Time.valueOf("10:00:00"), paciente2, medico2);
+		citaRepository.save(cita1);
+		citaRepository.save(cita2);
 
+		//FARMACIAS
+		Farmacia farmacia1 = new Farmacia("farmacia1", "123", new Direccion("Avenida Farmacia 1", "Ourense", 32004, "Ourense"), 986998877);
+		Farmacia farmacia2 = new Farmacia("farmacia2", "1234", new Direccion("Avenida Farmacia 2", "Ourense", 32004, "Ourense"), 986998877);
+		farmaciaRepository.save(farmacia1);
+		farmaciaRepository.save(farmacia2);
 	}
 }

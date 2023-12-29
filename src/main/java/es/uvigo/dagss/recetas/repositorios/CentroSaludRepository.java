@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface CentroSaludRepository extends JpaRepository<CentroSalud, Long> {
-    public List<CentroSalud> findAllByNombre(String nombre);
+    public List<CentroSalud> findAllByNombreContainingAndEstadoTrue(String nombre);
 
-    public List<CentroSalud> findAllByDireccionLocalidad(String localidad);
+    public List<CentroSalud> findAllByDireccionLocalidadContainingAndEstadoTrue(String localidad);
 }

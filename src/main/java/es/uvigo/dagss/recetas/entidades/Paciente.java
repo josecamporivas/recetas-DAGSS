@@ -1,12 +1,13 @@
 package es.uvigo.dagss.recetas.entidades;
 
-import java.util.Date;
 
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -34,4 +35,12 @@ public class Paciente extends Usuario {
         super(TipoUsuario.PACIENTE);
     }
 
+    public Paciente(String numTarjetaSanitaria, String numSS, Direccion direccion, Integer telefono, Date fechaNac) {
+        super(TipoUsuario.PACIENTE);
+        this.numTarjetaSanitaria = numTarjetaSanitaria;
+        this.numSS = numSS;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.fechaNac = fechaNac;
+    }
 }

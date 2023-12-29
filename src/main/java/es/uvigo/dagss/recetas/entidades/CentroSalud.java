@@ -21,7 +21,6 @@ public class CentroSalud implements Serializable {
 
     private Direccion direccion;
 
-    @Column(unique = true)
     private String email;
 
     private Boolean estado;
@@ -30,12 +29,13 @@ public class CentroSalud implements Serializable {
     private List<Medico> medicos;
 
     public CentroSalud() {
+        this.estado = true;
     }
-    public CentroSalud(String nombre, Direccion direccion, String email, Boolean estado, List<Medico> medicos) {
+    public CentroSalud(String nombre, Direccion direccion, String email, List<Medico> medicos) {
+        this();
         this.nombre = nombre;
         this.direccion = direccion;
         this.email = email;
-        this.estado = estado;
         this.medicos = medicos;
     }
 }

@@ -31,6 +31,20 @@ public class CentroSaludController {
     @Autowired
     private CentroSaludService centroSaludService;
 
+    @GetMapping(params = "nombre")
+    public ResponseEntity<List<CentroSalud>> findAllByNombre(@RequestParam(name = "nombre", required = true) String nombre) {
+        List<CentroSalud> centrosSalud = centroSaludService.findAllByNombre(nombre);
+
+        return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
+    }
+
+    @GetMapping(params = "localidad")
+    public ResponseEntity<List<CentroSalud>> findAllByLocalidad(@RequestParam(name = "localidad", required = true) String localidad) {
+        List<CentroSalud> centrosSalud = centroSaludService.findAllByLocalidad(localidad);
+
+        return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<CentroSalud>> getAll() {
         List<CentroSalud> result = centroSaludService.getAll();
@@ -45,37 +59,21 @@ public class CentroSaludController {
 		return ResponseEntity.created(uri).body(centroSalud);
     }
 
-
     @GetMapping(path = "/{id}")
     public ResponseEntity<CentroSalud> getById(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {
             throw new RuntimeException("No existe el centro de salud con id " + id);
         } else {
+
             return new ResponseEntity<>(centroSalud.get(), HttpStatus.OK);
-
         }
-    }
-
-    // esto no se si estará bien o no, quiero pensar que sí. No sé exactamente pq él usa requestMapping en vez de getMapping
-    @GetMapping(params = "nombre")
-    public ResponseEntity<List<CentroSalud>> findAllByNombre(@RequestParam(name = "nombre", required = true) String nombre) {
-        List<CentroSalud> centrosSalud = centroSaludService.findAllByNombre(nombre);
-
-        return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
-    }
-
-    @GetMapping(params = "localidad")
-    public ResponseEntity<List<CentroSalud>> findAllByLocalidad(@RequestParam(name = "localidad", required = true) String localidad) {
-        List<CentroSalud> centrosSalud = centroSaludService.findAllByLocalidad(localidad);
-
-        return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
     }
     
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CentroSalud> update(@PathVariable("id") Long id, @RequestBody CentroSalud centroSalud) {
         Optional<CentroSalud> optionalCentroSalud = centroSaludService.findById(id);
-
+        centroSalud.setIdCentro(id);
 		if (optionalCentroSalud.isEmpty()) {
             throw new RuntimeException("No existe el centro de salud con id " + id);
 		} else {

@@ -1,6 +1,7 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.Administrador;
+import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
 
 import java.util.List;
@@ -20,11 +21,16 @@ public class AdministradorService {
      * registro/creación, fecha de último acceso, activo [true|false])
      */
     public List<Administrador> getAll() {
-        return administradorRepository.findAll();
+        return administradorRepository.findAll().stream().filter(Administrador::getActivo).toList();
     }
 
     public Optional<Administrador> findById(Long id) {
-        return administradorRepository.findById(id);
+        Optional<Administrador> administrador = administradorRepository.findById(id);
+
+        if(administrador.isPresent() && !administrador.get().getActivo()){
+            return Optional.empty();
+        }
+        return administrador;
     }
 
     /*

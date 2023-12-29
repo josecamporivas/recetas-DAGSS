@@ -1,1 +1,7 @@
 1. La historia de usuario "HU-M6. [Médico]" creo que es mejor implementarla en la capa Controller
+
+2. Añadir el filtrado de datos en funcion de si está activo (borrado lógico),
+    de momento está hecho en AdministradorController y CentroSaludController
+Pasos:
+- Si no es una funcion del propio repositorio, añadir la condicion en la funcion de la interfaz repositorio
+- Si es una funcion del propio repositorio, filtrarla en el service

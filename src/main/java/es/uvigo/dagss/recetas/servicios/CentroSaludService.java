@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Optionals;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,11 +27,16 @@ public class CentroSaludService {
      */
 
     public List<CentroSalud> getAll() {
-        return centroSaludRepository.findAll();
+        return centroSaludRepository.findAll().stream().filter(CentroSalud::getEstado).toList();
     }
 
      public Optional<CentroSalud> findById(Long id) {
-        return centroSaludRepository.findById(id);
+        Optional<CentroSalud> centroSalud = centroSaludRepository.findById(id);
+
+        if(centroSalud.isPresent() && !centroSalud.get().getEstado()){
+            return Optional.empty();
+        }
+        return centroSalud;
     }
 
     /*
@@ -39,13 +45,13 @@ public class CentroSaludService {
      */
     /* no sé si buscarByName utiliza un like */
     public List<CentroSalud> findAllByNombre(String nombre) {
-        return centroSaludRepository.findAllByNombre(nombre);
+        return centroSaludRepository.findAllByNombreContainingAndEstadoTrue(nombre);
 
     }
 
     /*tengo serias dudas sobre esto la verdad WIP*/
     public List<CentroSalud> findAllByLocalidad(String localidad) {
-        return centroSaludRepository.findAllByDireccionLocalidad(localidad);
+        return centroSaludRepository.findAllByDireccionLocalidadContainingAndEstadoTrue(localidad);
     }
 
     /*
@@ -56,7 +62,6 @@ public class CentroSaludService {
 
     public CentroSalud update(CentroSalud centroSalud) {
         return centroSaludRepository.save(centroSalud);
-
     }
 
     /*
@@ -68,6 +73,6 @@ public class CentroSaludService {
 
      public void delete(CentroSalud centroSalud) {
         centroSalud.setEstado(false);
-        centroSaludRepository.save(centroSalud  );
+        centroSaludRepository.save(centroSalud);
     }
 }

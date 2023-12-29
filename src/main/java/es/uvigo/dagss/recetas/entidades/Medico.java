@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class Medico extends Usuario {
     private Integer telefono;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private CentroSalud centroSalud;
 
     public Medico() {

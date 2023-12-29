@@ -17,4 +17,11 @@ public class Direccion implements Serializable {
 
     public Direccion() {
     }
+
+    public Direccion(String domicilio, String provincia, Integer cp, String localidad) {
+        this.domicilio = domicilio;
+        this.provincia = provincia;
+        this.cp = cp;
+        this.localidad = localidad;
+    }
 }

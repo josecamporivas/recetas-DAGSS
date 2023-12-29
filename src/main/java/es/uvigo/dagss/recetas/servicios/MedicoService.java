@@ -66,7 +66,7 @@ public class MedicoService {
      * AL QUE ESTÁ RELACIONADO WIP.
      */
     public List<Medico> findByDireccionLocalidad(String localidad) {
-        List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidad(localidad);
+        List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidadContaining(localidad);
 
         return medicoRepository.findAllByCentroSaludIn(centroSaludList);
     }

@@ -40,7 +40,6 @@ public class AdministradorController {
     public ResponseEntity<Administrador> getById(@PathVariable("id") Long id) {
         Optional<Administrador> admin = administradorService.findById(id);
         if (admin.isEmpty()) {
-
             throw new RuntimeException("No existe el administrador con id " + id);
         } else {
             return new ResponseEntity<>(admin.get(), HttpStatus.OK);

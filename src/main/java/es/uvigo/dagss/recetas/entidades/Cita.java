@@ -7,7 +7,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 
 @Getter
 @Setter
@@ -28,12 +29,22 @@ public class Cita implements Serializable {
     private Date fecha;
 
     @Temporal(TemporalType.TIME)
-    private Date hora;
+    private Time hora;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Medico medico;
+
+    public Cita() {
+    }
+
+    public Cita(Date fecha, Time hora, Paciente paciente, Medico medico) {
+        this.fecha = fecha;
+        this.hora = hora;
+        this.paciente = paciente;
+        this.medico = medico;
+    }
 
 }

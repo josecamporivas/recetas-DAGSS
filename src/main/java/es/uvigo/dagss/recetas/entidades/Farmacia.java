@@ -25,5 +25,13 @@ public class Farmacia extends Usuario {
     public Farmacia() {
         super(TipoUsuario.FARMACIA);
     }
+
+    public Farmacia(String nombreFarmacia, String numColegiadoFarmaceutico, Direccion direccion, Integer telefono) {
+        super(TipoUsuario.FARMACIA);
+        this.nombreFarmacia = nombreFarmacia;
+        this.numColegiadoFarmaceutico = numColegiadoFarmaceutico;
+        this.direccion = direccion;
+        this.telefono = telefono;
+    }
     
 }

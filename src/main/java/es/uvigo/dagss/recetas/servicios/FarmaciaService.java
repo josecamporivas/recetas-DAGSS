@@ -1,12 +1,11 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.Farmacia;
-import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.repositorios.FarmaciaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,11 @@ public class FarmaciaService {
     }
 
     public List<Farmacia> findAllByNombreFarmacia(String nombreFarmacia) {
-        return farmaciaRepository.findAllByNombreFarmacia(nombreFarmacia);
+        return farmaciaRepository.findAllByNombreFarmaciaContaining(nombreFarmacia);
+    }
+
+    public List<Farmacia> findAllByNumColegiado(String numColegiado) {
+        return farmaciaRepository.findAllByNumColegiadoFarmaceuticoContaining(numColegiado);
     }
 
     /*

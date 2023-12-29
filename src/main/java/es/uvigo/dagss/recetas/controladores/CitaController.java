@@ -45,19 +45,15 @@ public class CitaController {
     
     @RequestMapping(params = "medicoId", method = RequestMethod.GET)
     public ResponseEntity<List<Cita>> findAllByMedico(@RequestParam(name = "medicoId", required = true) Long medicoId) {
-        List<Cita> result = new ArrayList<>();
-        result = citaService.findAllByMedico(medicoService.findById(medicoId).get());
+        List<Cita> result = citaService.findAllByMedico(medicoService.findById(medicoId).orElse(null));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    
 
     //de otra forma petaba al haber dos métodos con el mismo path. Para ello, como son citas para médicos de hoy, creo el nuevo path /today
-
     @RequestMapping(path="/today" ,params = "medicoId", method = RequestMethod.GET)
     public ResponseEntity<List<Cita>> findAllByMedicoForToday(@RequestParam(name = "medicoId", required = true) Long medicoId) {
-        List<Cita> result = new ArrayList<>();
-        Medico medico = medicoService.findById(medicoId).get();
-        result = citaService.findAllByMedicoForToday(medico);
+        Medico medico = medicoService.findById(medicoId).orElse(null);
+        List<Cita> result = citaService.findAllByMedicoForToday(medico);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -65,12 +61,10 @@ public class CitaController {
     public ResponseEntity<HttpStatus> setAnulada(@PathVariable("id") Long id) {
         Optional<Cita> cita = citaService.findById(id);
         if (cita.isEmpty()) {
-
             throw new RuntimeException("No existe la cita con id " + id);
         } else {
             citaService.setAnulada(cita.get());
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
         }
     }
 

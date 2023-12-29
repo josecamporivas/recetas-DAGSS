@@ -1,16 +1,12 @@
 package es.uvigo.dagss.recetas.controladores;
 
-import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.entidades.Farmacia;
 import es.uvigo.dagss.recetas.servicios.FarmaciaService;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.el.stream.Optional;
-import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,24 +33,14 @@ public class FarmaciaController {
         List<Farmacia> result = farmaciaService.getAll();
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<Farmacia> getById(@PathVariable Long id){
         Optional<Farmacia> farmacia = farmaciaService.findById(id);
-        if (paciente.isEmpty()) {
+        if (farmacia.isEmpty()) {
             throw new RuntimeException("No existe el paciente con id " + id);
         }
-        return new ResponseEntity<>(paciente.get(), HttpStatus.OK);
-    }
-    @GetMapping(path = "/{nombreFarmacia}")
-    public ResponseEntity<Farmacia> getByNombreFarmacia(@PathVariable("nombreFarmacia") string nombreFarmacia) {
-        Optional<Farmacia> farmacia = farmaciaService.findAllByNombreFarmacia(nombreFarmacia);
-        if (farmacia.isEmpty()) {
-
-            throw new RuntimeException("No existe el administrador con id " + nombreFarmacia);
-        } else {
-            return new ResponseEntity<>(farmacia.get(), HttpStatus.OK);
-
-        }
+        return new ResponseEntity<>(farmacia.get(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{nombreFarmacia}")
@@ -62,18 +48,9 @@ public class FarmaciaController {
         return new ResponseEntity<>(farmaciaService.findAllByNombreFarmacia(nombreFarmacia), HttpStatus.OK);
     }
 
-
-
     @GetMapping(path = "/{numColegiadosFarmaceuticos}")
-    public ResponseEntity<Farmacia> getByNombreFarmacia(@PathVariable("nombreFarmacia") string nombreFarmacia) {
-        Optional<Farmacia> farmacia = farmaciaService.findAllByNombreFarmacia(nombreFarmacia);
-        if (farmacia.isEmpty()) {
-
-            throw new RuntimeException("No existe el administrador con id " + nombreFarmacia);
-        } else {
-            return new ResponseEntity<>(farmacia.get(), HttpStatus.OK);
-
-        }
+    public ResponseEntity<List<Farmacia>> getByNombreFarmacia(@PathVariable String numColegiadosFarmaceuticos) {
+        return new ResponseEntity<>(farmaciaService.findAllByNumColegiado(numColegiadosFarmaceuticos), HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
