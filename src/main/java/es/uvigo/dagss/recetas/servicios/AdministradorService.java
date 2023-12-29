@@ -1,7 +1,6 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import es.uvigo.dagss.recetas.entidades.Administrador;
-import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.repositorios.AdministradorRepository;
 
 import java.util.List;
@@ -59,7 +58,6 @@ public class AdministradorService {
      * el valor de activo a false.
      * Una vez completada esa edición se actualizará la lista de usuarios.
      */
-    /* ?????????? Entiendo q su eliminación se haría mediante un edit */
     public void delete(Administrador administrador) {
         administrador.desactivar();
         administradorRepository.save(administrador);

@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,16 +24,16 @@ public class CentroSalud implements Serializable {
 
     private String email;
 
+    @Column(columnDefinition = "boolean default 1")
     private Boolean estado;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Medico> medicos;
 
     public CentroSalud() {
-        this.estado = true;
     }
     public CentroSalud(String nombre, Direccion direccion, String email, List<Medico> medicos) {
-        this();
         this.nombre = nombre;
         this.direccion = direccion;
         this.email = email;

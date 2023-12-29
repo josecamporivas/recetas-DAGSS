@@ -1,6 +1,8 @@
 package es.uvigo.dagss.recetas.entidades;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.*;
@@ -28,7 +30,8 @@ public class Paciente extends Usuario {
     @Temporal(TemporalType.DATE)
     private Date fechaNac;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Medico medicoAsignado; //El centro de salud asociado se obtiene a partir del médico
 
     public Paciente() {

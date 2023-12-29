@@ -3,6 +3,8 @@ package es.uvigo.dagss.recetas.servicios;
 import java.util.List;
 import java.util.Optional;
 
+import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
+import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import es.uvigo.dagss.recetas.entidades.Cita;
@@ -18,6 +20,11 @@ public class CitaService {
     @Autowired
     private CitaRepository citaRepository;
 
+    @Autowired
+    private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private MedicoRepository medicoRepository;
     /*
      * Se mostrará una lista ordenada por hora de inicio con las citas actualmente
      * registradas, indicando su datos esenciales (paciente, médico, centro de
@@ -45,14 +52,14 @@ public class CitaService {
         return citaRepository.findAllByMedico(medico);
     }
 
-    public Cita setAnulada(Cita cita) {
+    public void setAnulada(Cita cita) {
         cita.setEstado(TipoEstadoCita.ANULADA);
-        return citaRepository.save(cita);
+        citaRepository.save(cita);
     }
 
-    public Cita setCompletada(Cita cita){
+    public void setCompletada(Cita cita){
         cita.setEstado(TipoEstadoCita.COMPLETADA);
-        return citaRepository.save(cita);
+        citaRepository.save(cita);
     }
 
     /*
@@ -70,4 +77,9 @@ public class CitaService {
     public List<Cita> findAllByMedicoForToday(Medico medico){
         return citaRepository.findAllByMedicoAndFechaToday(medico);
     }
+
+    public Cita update(Cita cita){
+        return citaRepository.save(cita);
+    }
+
 }

@@ -66,7 +66,7 @@ public class MedicoService {
      * AL QUE ESTÁ RELACIONADO WIP.
      */
     public List<Medico> findByDireccionLocalidad(String localidad) {
-        List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidadContaining(localidad);
+        List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidadContainingAndEstadoTrue(localidad);
 
         return medicoRepository.findAllByCentroSaludIn(centroSaludList);
     }
@@ -113,7 +113,8 @@ public class MedicoService {
     }
 
     /* WIP: metodo con muchas probabilidades de no funcionar */
-    public List<LocalDateTime> findFreeSpaceSchedule(Medico medico, LocalDateTime day) {
+    //TODO: important
+    /*public List<LocalDateTime> findFreeSpaceSchedule(Medico medico, LocalDateTime day) {
         LocalDateTime inicio = day.withHour(8).withMinute(30).withSecond(0).withNano(0);
         LocalDateTime fin = day.withHour(15).withMinute(30).withSecond(0).withNano(0);
 
@@ -140,6 +141,6 @@ public class MedicoService {
         }
 
         return huecosDisponibles;
-    }
+    }*/
 
 }

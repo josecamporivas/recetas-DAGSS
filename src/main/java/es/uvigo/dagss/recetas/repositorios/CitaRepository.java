@@ -4,6 +4,8 @@ import es.uvigo.dagss.recetas.entidades.Cita;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     @Query("select c from Cita c where c.medico = :medico and c.fecha = CURRENT_DATE")
     public List<Cita> findAllByMedicoAndFechaToday(@Param("medico") Medico medico);
 
-    public List<Cita> findAllByMedicoAndFechaAndHoraBetweenAndEstado(Medico medico, LocalDateTime fecha,
-                                                                     LocalDateTime horaInicio, LocalDateTime horaFin,
+    public List<Cita> findAllByMedicoAndFechaAndHoraBetweenAndEstado(Medico medico, Date fecha,
+                                                                     Time horaInicio, Time horaFin,
                                                                      TipoEstadoCita estadoCita);
 }

@@ -18,12 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,27 +35,64 @@ public class CitaController {
     
     @GetMapping
     public ResponseEntity<List<Cita>> getAll() {
-        List<Cita> result = new ArrayList<>();
-        result = citaService.getAll();
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-    
-    @RequestMapping(params = "medicoId", method = RequestMethod.GET)
-    public ResponseEntity<List<Cita>> findAllByMedico(@RequestParam(name = "medicoId", required = true) Long medicoId) {
-        List<Cita> result = citaService.findAllByMedico(medicoService.findById(medicoId).orElse(null));
+        List<Cita> result = citaService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    //de otra forma petaba al haber dos métodos con el mismo path. Para ello, como son citas para médicos de hoy, creo el nuevo path /today
-    @RequestMapping(path="/today" ,params = "medicoId", method = RequestMethod.GET)
-    public ResponseEntity<List<Cita>> findAllByMedicoForToday(@RequestParam(name = "medicoId", required = true) Long medicoId) {
-        Medico medico = medicoService.findById(medicoId).orElse(null);
-        List<Cita> result = citaService.findAllByMedicoForToday(medico);
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Cita> findById(@PathVariable Long id){
+        Optional<Cita> optionalCita = citaService.findById(id);
+        if(optionalCita.isEmpty()){
+            throw new RuntimeException("No existe una cita con el id " + id);
+        }
+
+        return new ResponseEntity<>(optionalCita.get(), HttpStatus.OK);
+    }
+    
+    @GetMapping(path = "/medico/{medicoId}")
+    public ResponseEntity<List<Cita>> findAllByMedico(@PathVariable Long medicoId) {
+        Optional<Medico> medicoCita = medicoService.findById(medicoId);
+        if(medicoCita.isEmpty()){
+            throw new RuntimeException("No existe un medico con el id " + medicoId);
+        }
+        List<Cita> result = citaService.findAllByMedico(medicoCita.get());
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(path="/medico/{medicoId}/today")
+    public ResponseEntity<List<Cita>> findAllByMedicoForToday(@PathVariable Long medicoId) {
+        Optional<Medico> medico = medicoService.findById(medicoId);
+        if(medico.isEmpty()){
+            throw new RuntimeException("No existe el médico con id " + medicoId);
+        }
+
+        List<Cita> result = citaService.findAllByMedicoForToday(medico.get());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Cita> create(@RequestBody Cita cita) {
+        Cita newCita = citaService.create(cita);
+        URI uri = createCitaUri(newCita);
+
+        return ResponseEntity.created(uri).body(newCita);
+    }
+
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Cita> setCompletada(@PathVariable Long id, @RequestBody Cita cita) {
+        Optional<Cita> optionalCita = citaService.findById(id);
+        cita.setIdCita(id);
+
+        if (optionalCita.isEmpty()) {
+            throw new RuntimeException("No existe la cita con id " + id);
+        } else {
+            Cita updatedCita = citaService.update(cita);
+            return new ResponseEntity<>(updatedCita, HttpStatus.OK);
+        }
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<HttpStatus> setAnulada(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpStatus> setAnulada(@PathVariable Long id) {
         Optional<Cita> cita = citaService.findById(id);
         if (cita.isEmpty()) {
             throw new RuntimeException("No existe la cita con id " + id);
@@ -68,30 +102,8 @@ public class CitaController {
         }
     }
 
-    @PutMapping(path = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Cita> setCompletada(@PathVariable("id") Long id, @RequestBody Cita cita) {
-        Optional<Cita> optionalCita = citaService.findById(id);
-
-        if (optionalCita.isEmpty()) {
-            throw new RuntimeException("No existe la cita con id " + id);
-        } else {
-            Cita newCita = citaService.setCompletada(cita);
-            return new ResponseEntity<>(newCita, HttpStatus.OK);
-        }
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Cita> create(@RequestBody Cita cita) {
-        Cita newCita = citaService.create(cita);
-        URI uri = createCitaUri(newCita);
-
-        return ResponseEntity.created(uri).body(cita);
-    }
-
     private URI createCitaUri(Cita cita) {
         return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(cita.getIdCita())
                 .toUri();
     }
-    
-    
 }

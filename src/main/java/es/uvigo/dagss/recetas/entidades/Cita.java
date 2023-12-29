@@ -4,7 +4,6 @@ import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoCita;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -22,7 +21,6 @@ public class Cita implements Serializable {
     @Column(columnDefinition = "varchar(32) DEFAULT 'PLANIFICADA'")
     private TipoEstadoCita estado = TipoEstadoCita.PLANIFICADA;
 
-    @Value("15")
     private Integer duracion;
 
     @Temporal(TemporalType.DATE)
@@ -31,16 +29,18 @@ public class Cita implements Serializable {
     @Temporal(TemporalType.TIME)
     private Time hora;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Paciente paciente;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Medico medico;
 
     public Cita() {
+        this.duracion = 15;
     }
 
     public Cita(Date fecha, Time hora, Paciente paciente, Medico medico) {
+        this();
         this.fecha = fecha;
         this.hora = hora;
         this.paciente = paciente;
