@@ -21,7 +21,7 @@ public class FarmaciaService {
      */
 
     public List<Farmacia> getAll() {
-        return farmaciaRepository.findAll();
+        return farmaciaRepository.findAll().stream().filter(Farmacia::getActivo).toList();
     }
     /*
      * La lista de farmacias podrá filtrarse por nombre de establecimiento o por
@@ -30,15 +30,19 @@ public class FarmaciaService {
      */
 
     public Optional<Farmacia> findById(Long id){
-        return farmaciaRepository.findById(id);
+        Optional<Farmacia> farmacia = farmaciaRepository.findById(id);
+        if(farmacia.isPresent() && !farmacia.get().getActivo()){
+            return Optional.empty();
+        }
+        return farmacia;
     }
 
     public List<Farmacia> findAllByNombreFarmacia(String nombreFarmacia) {
-        return farmaciaRepository.findAllByNombreFarmaciaContaining(nombreFarmacia);
+        return farmaciaRepository.findAllByNombreFarmaciaContainingAndActivoTrue(nombreFarmacia);
     }
 
     public List<Farmacia> findAllByNumColegiado(String numColegiado) {
-        return farmaciaRepository.findAllByNumColegiadoFarmaceuticoContaining(numColegiado);
+        return farmaciaRepository.findAllByNumColegiadoFarmaceuticoContainingAndActivoTrue(numColegiado);
     }
 
     /*
