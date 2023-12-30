@@ -1,6 +1,5 @@
 package es.uvigo.dagss.recetas.controladores;
 
-import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.servicios.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-@RestController()
+@RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
 
