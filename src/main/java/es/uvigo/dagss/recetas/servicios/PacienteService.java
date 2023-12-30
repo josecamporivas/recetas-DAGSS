@@ -30,11 +30,17 @@ public class PacienteService {
      */
 
      public List<Paciente> getAll(){
-        return pacienteRepository.findAll();
+        return pacienteRepository.findAll().stream().filter(Paciente::getActivo).toList();
      }
 
      public Optional<Paciente> findById(Long id){
-        return pacienteRepository.findById(id);
+         Optional<Paciente> paciente = pacienteRepository.findById(id);
+
+         if(paciente.isPresent() && !paciente.get().getActivo()){
+             return Optional.empty();
+         }
+
+         return paciente;
      }
 
     /*
@@ -42,11 +48,11 @@ public class PacienteService {
      * permitiéndose en todos estos casos búsquedas aproximadas (tipo LIKE en SQL).
      */
     public List<Paciente> findAllByNombreCompleto(String nombre) {
-        return pacienteRepository.findByNombreCompleto(nombre);
+        return pacienteRepository.findByNombreCompletoAndActivo(nombre);
     }
 
     public List<Paciente> findAllByLocalidad(String localidad) {
-        return pacienteRepository.findByDireccionLocalidad(localidad);
+        return pacienteRepository.findByDireccionLocalidadAndActivoTrue(localidad);
     }
 
     /*
@@ -58,13 +64,13 @@ public class PacienteService {
      */
     /* Sé que se obtiene tras obtener el médico peeero ns cómo se hace eso xd WIP */
     public List<Paciente> findAllByCentroSalud(Long centroSaludId) {
-        List<Medico> medicoList = medicoRepository.findAllByCentroSalud_IdCentro(centroSaludId);
+        List<Medico> medicoList = medicoRepository.findAllByCentroSalud_IdCentroAndActivoTrue(centroSaludId);
 
-        return pacienteRepository.findAllByMedicoAsignadoIn(medicoList);
+        return pacienteRepository.findAllByMedicoAsignadoInAndActivoTrue(medicoList);
     }
 
     public List<Paciente> findAllByMedico(Long medicoId) {
-        return pacienteRepository.findByMedicoAsignadoId(medicoId);
+        return pacienteRepository.findByMedicoAsignadoIdAndActivoTrue(medicoId);
     }
 
     /*

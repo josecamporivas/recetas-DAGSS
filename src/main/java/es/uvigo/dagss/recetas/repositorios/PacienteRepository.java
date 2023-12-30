@@ -12,11 +12,11 @@ import org.springframework.data.jpa.repository.Query;
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
     public Paciente getByLoginAndPassword(String login, String password);
-    public List<Paciente> findByDireccionLocalidad(String localidad);
-    public List<Paciente> findByMedicoAsignadoId(Long medicoAsignadoId);
-    public List<Paciente> findAllByMedicoAsignadoIn(List<Medico> medicos);
+    public List<Paciente> findByDireccionLocalidadAndActivoTrue(String localidad);
+    public List<Paciente> findByMedicoAsignadoIdAndActivoTrue(Long medicoAsignadoId);
+    public List<Paciente> findAllByMedicoAsignadoInAndActivoTrue(List<Medico> medicos);
 
     //TODO: no se si funcionará
-    @Query("SELECT p FROM Paciente p WHERE p.nombreCompleto.nombre like ?1 or p.nombreCompleto.apellido1 like ?1 or p.nombreCompleto.apellido2 like ?1")
-    public List<Paciente> findByNombreCompleto(String nombre);
+    @Query("SELECT p FROM Paciente p WHERE p.estado = true and p.nombreCompleto.nombre like ?1 or p.nombreCompleto.apellido1 like ?1 or p.nombreCompleto.apellido2 like ?1")
+    public List<Paciente> findByNombreCompletoAndActivo(String nombre);
 }
