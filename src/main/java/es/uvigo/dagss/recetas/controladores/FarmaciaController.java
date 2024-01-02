@@ -86,7 +86,7 @@ public class FarmaciaController {
 
 
     private URI createFarmacia(Farmacia farmacia) {
-        return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{nombreFarmacia}").buildAndExpand(farmacia.getNombreFarmacia())
+        return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(farmacia.getId())
                 .toUri();
     }
 }

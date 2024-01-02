@@ -63,13 +63,14 @@ public class FarmaciaService {
      */
 
      public void delete(Farmacia farmacia){
-        farmacia.desactivar();
-        farmaciaRepository.save(farmacia);
+         farmacia.desactivar();
+         farmaciaRepository.save(farmacia);
      }
 
 
     public Farmacia create(Farmacia farmacia) {
-        return farmaciaRepository.save(farmacia);
+         farmacia.setPassword(farmacia.getNumColegiadoFarmaceutico());
+         return farmaciaRepository.save(farmacia);
     }
 
 }
