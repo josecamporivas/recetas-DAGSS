@@ -2,6 +2,7 @@ package es.uvigo.dagss.recetas;
 
 import es.uvigo.dagss.recetas.entidades.*;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
+import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
 import es.uvigo.dagss.recetas.repositorios.*;
 import org.hibernate.type.descriptor.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,10 +81,16 @@ public class RecetasApplication implements CommandLineRunner {
 		//PACIENTES
 		Paciente paciente1 = new Paciente("1234567", "123", new Direccion("Avenida Paciente 1", "Ourense", 32004, "Ourense"), 986998877, Date.valueOf("2000-01-01"));
 		Paciente paciente2 = new Paciente("7654321", "1234", new Direccion("Avenida Paciente 2", "Ourense", 32004, "Ourense"), 986998877, Date.valueOf("2000-02-02"));
+		Paciente paciente3 = new Paciente("246810", "12345", new Direccion("Avenida Paciente 3", "Pontevedra", 36000, "Pontevedra"), 986998877, Date.valueOf("2002-02-02"));
+		paciente1.setNombreCompleto(new Nombre("Antonio", "Gonzalez", "Alonso"));
+		paciente2.setNombreCompleto(new Nombre("Juan", "Pepito", "Perez"));
+		paciente3.setNombreCompleto(new Nombre("Maria", "Gonzalez", "Alonso"));
 		paciente1.setMedicoAsignado(medico1);
 		paciente2.setMedicoAsignado(medico2);
+		paciente3.setMedicoAsignado(medico3);
 		pacienteRepository.save(paciente1);
 		pacienteRepository.save(paciente2);
+		pacienteRepository.save(paciente3);
 
 		//CITAS
 		Cita cita1 = new Cita(Date.valueOf("2024-01-01"), Time.valueOf("10:00:00"), paciente1, medico1);

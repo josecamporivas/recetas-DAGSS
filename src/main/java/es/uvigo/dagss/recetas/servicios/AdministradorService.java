@@ -20,13 +20,13 @@ public class AdministradorService {
      * registro/creación, fecha de último acceso, activo [true|false])
      */
     public List<Administrador> getAll() {
-        return administradorRepository.findAll().stream().filter(Administrador::getActivo).toList();
+        return administradorRepository.findAll().stream().filter(Administrador::getEstado).toList();
     }
 
     public Optional<Administrador> findById(Long id) {
         Optional<Administrador> administrador = administradorRepository.findById(id);
 
-        if(administrador.isPresent() && !administrador.get().getActivo()){
+        if(administrador.isPresent() && !administrador.get().getEstado()){
             return Optional.empty();
         }
         return administrador;

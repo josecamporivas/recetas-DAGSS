@@ -32,8 +32,10 @@ public class CentroSalud implements Serializable {
     private List<Medico> medicos;
 
     public CentroSalud() {
+        this.estado = true;
     }
     public CentroSalud(String nombre, Direccion direccion, String email, List<Medico> medicos) {
+        this();
         this.nombre = nombre;
         this.direccion = direccion;
         this.email = email;

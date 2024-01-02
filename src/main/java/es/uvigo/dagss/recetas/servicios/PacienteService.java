@@ -1,13 +1,10 @@
 package es.uvigo.dagss.recetas.servicios;
 
-import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
-import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
 import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +27,13 @@ public class PacienteService {
      */
 
      public List<Paciente> getAll(){
-        return pacienteRepository.findAll().stream().filter(Paciente::getActivo).toList();
+        return pacienteRepository.findAll().stream().filter(Paciente::getEstado).toList();
      }
 
      public Optional<Paciente> findById(Long id){
          Optional<Paciente> paciente = pacienteRepository.findById(id);
 
-         if(paciente.isPresent() && !paciente.get().getActivo()){
+         if(paciente.isPresent() && !paciente.get().getEstado()){
              return Optional.empty();
          }
 
@@ -52,7 +49,7 @@ public class PacienteService {
     }
 
     public List<Paciente> findAllByLocalidad(String localidad) {
-        return pacienteRepository.findByDireccionLocalidadAndActivoTrue(localidad);
+        return pacienteRepository.findByDireccionLocalidadContainingAndEstadoTrue(localidad);
     }
 
     /*
@@ -64,13 +61,13 @@ public class PacienteService {
      */
     /* Sé que se obtiene tras obtener el médico peeero ns cómo se hace eso xd WIP */
     public List<Paciente> findAllByCentroSalud(Long centroSaludId) {
-        List<Medico> medicoList = medicoRepository.findAllByCentroSalud_IdCentroAndActivoTrue(centroSaludId);
+        List<Medico> medicoList = medicoRepository.findAllByActivoTrueAndCentroSalud_IdCentro(centroSaludId);
 
-        return pacienteRepository.findAllByMedicoAsignadoInAndActivoTrue(medicoList);
+        return pacienteRepository.findAllByMedicoAsignadoInAndEstadoTrue(medicoList);
     }
 
     public List<Paciente> findAllByMedico(Long medicoId) {
-        return pacienteRepository.findByMedicoAsignadoIdAndActivoTrue(medicoId);
+        return pacienteRepository.findByMedicoAsignadoIdAndEstadoTrue(medicoId);
     }
 
     /*
