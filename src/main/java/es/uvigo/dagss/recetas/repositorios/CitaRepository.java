@@ -23,7 +23,7 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     @Query("select c from Cita c where c.medico = :medico and c.fecha = CURRENT_DATE")
     public List<Cita> findAllByMedicoAndFechaToday(@Param("medico") Medico medico);
 
-    public List<Cita> findAllByMedicoAndFechaAndHoraBetweenAndEstado(Medico medico, Date fecha,
+    public List<Cita> findAllByMedico_IdAndFechaAndHoraBetweenAndEstado(Long medico, Date fecha,
                                                                      Time horaInicio, Time horaFin,
                                                                      TipoEstadoCita estadoCita);
 }

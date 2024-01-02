@@ -53,8 +53,12 @@ public class RecetasApplication implements CommandLineRunner {
 
 		//MEDICOS
 		Medico medico1 = new Medico("123", 123, null);
+		medico1.setNombreCompleto(new Nombre("Carlos", "Fernandez", "Amil"));
 		Medico medico2 = new Medico("1234", 1234, null);
+		medico2.setNombreCompleto(new Nombre("Elena", "Vieitez", "Perez"));
 		Medico medico3 = new Medico("12345", 12345, null);
+		medico3.setNombreCompleto(new Nombre("Ramon", "Ramirez", "Ramirez"));
+
 		medicoRepository.save(medico1);
 		medicoRepository.save(medico2);
 		medicoRepository.save(medico3);
@@ -93,8 +97,8 @@ public class RecetasApplication implements CommandLineRunner {
 		pacienteRepository.save(paciente3);
 
 		//CITAS
-		Cita cita1 = new Cita(Date.valueOf("2024-01-01"), Time.valueOf("10:00:00"), paciente1, medico1);
-		Cita cita2 = new Cita(Date.valueOf("2024-02-02"), Time.valueOf("10:00:00"), paciente2, medico2);
+		Cita cita1 = new Cita(Date.valueOf("2024-06-01"), Time.valueOf("10:00:00"), paciente1, medico1);
+		Cita cita2 = new Cita(Date.valueOf("2024-06-02"), Time.valueOf("10:00:00"), paciente2, medico2);
 		citaRepository.save(cita1);
 		citaRepository.save(cita2);
 

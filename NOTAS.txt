@@ -5,3 +5,5 @@
 Pasos:
 - Si no es una funcion del propio repositorio, añadir la condicion en la funcion de la interfaz repositorio
 - Si es una funcion del propio repositorio, filtrarla en el service
+
+3. Hacer que las fechas de alta no se modifiquen en cada consulta

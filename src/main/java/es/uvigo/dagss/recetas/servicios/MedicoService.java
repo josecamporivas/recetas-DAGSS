@@ -3,12 +3,15 @@ package es.uvigo.dagss.recetas.servicios;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.entidades.Cita;
 import es.uvigo.dagss.recetas.entidades.Medico;
+import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoCita;
 import es.uvigo.dagss.recetas.repositorios.CentroSaludRepository;
 import es.uvigo.dagss.recetas.repositorios.CitaRepository;
 import es.uvigo.dagss.recetas.repositorios.MedicoRepository;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +39,18 @@ public class MedicoService {
      */
 
     public List<Medico> getAll() {
-        return medicoRepository.findAll();
+        return medicoRepository.findAll().stream().filter(Medico::getEstado).toList();
 
     }
 
     public Optional<Medico> findById(Long id) {
-        return medicoRepository.findById(id);
+        Optional<Medico> medico = medicoRepository.findById(id);
+
+        if(medico.isPresent() && !medico.get().getEstado()){
+            return Optional.empty();
+        }
+
+        return medico;
     }
     /*
      * La lista de médicos podrá filtrarse por nombre o por localidad, permitiéndose
@@ -53,12 +62,12 @@ public class MedicoService {
      * el mismo método, siendo la misma llamada para ambas
      */
 
-    public List<Medico> findAllByNombre(Nombre nombre) {
-        return medicoRepository.findByNombreCompleto(nombre);
+    public List<Medico> findAllByNombre(String nombre) {
+        return medicoRepository.findByNombreCompletoAndActivo(nombre);
     }
 
-    public List<Medico> findByNombreCompletoAndCentroSalud(Nombre nombre, CentroSalud centroSalud) {
-        return medicoRepository.findByNombreCompletoAndCentroSalud(nombre, centroSalud);
+    public List<Medico> findAllByCentroSalud(Long centroSalud) {
+        return medicoRepository.findByCentroSalud_IdCentroAndEstadoTrue(centroSalud);
     }
 
     /*
@@ -68,7 +77,7 @@ public class MedicoService {
     public List<Medico> findByDireccionLocalidad(String localidad) {
         List<CentroSalud> centroSaludList = centroSaludRepository.findAllByDireccionLocalidadContainingAndEstadoTrue(localidad);
 
-        return medicoRepository.findAllByCentroSaludIn(centroSaludList);
+        return medicoRepository.findAllByCentroSaludInAndEstadoTrue(centroSaludList);
     }
 
     /*
@@ -109,38 +118,45 @@ public class MedicoService {
      */
 
     public Medico create(Medico medico) {
+        medico.setPassword(medico.getNumColegiado());
         return medicoRepository.save(medico);
     }
 
     /* WIP: metodo con muchas probabilidades de no funcionar */
-    //TODO: important
-    /*public List<LocalDateTime> findFreeSpaceSchedule(Medico medico, LocalDateTime day) {
-        LocalDateTime inicio = day.withHour(8).withMinute(30).withSecond(0).withNano(0);
-        LocalDateTime fin = day.withHour(15).withMinute(30).withSecond(0).withNano(0);
+    public List<Time> findFreeSpaceSchedule(Long idMedico, Date day) {
+        Optional<Medico> medico = medicoRepository.findById(idMedico);
+        if(medico.isEmpty()){
+            throw new RuntimeException("No existe el medico con id " + idMedico);
+        }
+        LocalDateTime inicio = day.toLocalDate().atTime(8,30);
+        LocalDateTime fin = day.toLocalDate().atTime(15,30);
 
-        List<Cita> citas = citaRepository.findAllByMedicoAndFechaAndHoraBetweenAndEstado(medico, day, inicio, fin,
-                TipoEstadoCita.PLANIFICADA);
+        List<Cita> citas = citaRepository.findAllByMedico_IdAndFechaAndHoraBetweenAndEstado(idMedico, day,
+                            Time.valueOf("8:30:00"), Time.valueOf("15:30:00"), TipoEstadoCita.PLANIFICADA);
 
-        List<LocalDateTime> huecosDisponibles = new ArrayList<>();
+        return getFreeSpaces(inicio, fin, citas);
+    }
+
+    private static List<Time> getFreeSpaces(LocalDateTime inicio, LocalDateTime fin, List<Cita> citas) {
+        List<Time> huecosDisponibles = new ArrayList<>();
 
         LocalDateTime actual = inicio;
         while (actual.isBefore(fin)) {
             boolean hayCita = false;
             for (Cita cita : citas) {
-                if (cita.getFecha().equals(actual)) {
+                if (cita.getHora().toLocalTime().equals(actual.toLocalTime())) {
                     hayCita = true;
                     break;
                 }
             }
 
             if (!hayCita) {
-                huecosDisponibles.add(actual);
+                huecosDisponibles.add(Time.valueOf(actual.toLocalTime()));
             }
 
             actual = actual.plusMinutes(15);
         }
-
         return huecosDisponibles;
-    }*/
+    }
 
 }
