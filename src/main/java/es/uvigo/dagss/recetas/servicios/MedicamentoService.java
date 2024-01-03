@@ -1,6 +1,7 @@
 package es.uvigo.dagss.recetas.servicios;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,9 +21,16 @@ public class MedicamentoService {
      */
 
     public List<Medicamento> getAll() {
-        return medicamentoRepository.findAll();
+        return medicamentoRepository.findAll().stream().filter(Medicamento::getEstado).toList();
     }
 
+    public Optional<Medicamento> findById(Long id){
+        Optional<Medicamento> medicamento = medicamentoRepository.findById(id);
+        if(medicamento.isPresent() && !medicamento.get().getEstado()){
+            return Optional.empty();
+        }
+        return medicamento;
+    }
     /*
      * La lista de medicamentos podrá filtrarse por nombre comercial, principio
      * activo, fabricante o famila, permitiéndose en todos estos casos búsquedas
@@ -30,19 +38,19 @@ public class MedicamentoService {
      */
 
     public List<Medicamento> findAllByNombre(String nombre) {
-        return medicamentoRepository.findAllByNombre(nombre);
+        return medicamentoRepository.findAllByNombreContainingAndEstadoTrue(nombre);
     }
 
     public List<Medicamento> findAllByPrincipioActivo(String principioActivo) {
-        return medicamentoRepository.findAllByPrincipioActivo(principioActivo);
+        return medicamentoRepository.findAllByPrincipioActivoContainingAndEstadoTrue(principioActivo);
     }
 
     public List<Medicamento> findAllByFabricante(String fabricante) {
-        return medicamentoRepository.findAllByFabricante(fabricante);
+        return medicamentoRepository.findAllByFabricanteContainingAndEstadoTrue(fabricante);
     }
 
     public List<Medicamento> findAllByFamilia(String familia) {
-        return medicamentoRepository.findAllByFamilia(familia);
+        return medicamentoRepository.findAllByFamiliaContainingAndEstadoTrue(familia);
     }
 
     /*
