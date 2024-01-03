@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -22,8 +22,7 @@ public class Receta implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaValidezFinal;
 
-    @Column(columnDefinition = "varchar(32) DEFAULT 'PLANIFICADA'")
-    private TipoEstadoReceta estado = TipoEstadoReceta.PLANIFICADA;
+    private TipoEstadoReceta estado;
 
     private Integer numUnidades;
 
@@ -31,8 +30,15 @@ public class Receta implements Serializable {
     private Prescripcion prescripcion;
 
     @ManyToOne
-    private Medicamento medicamento;
-
-    @ManyToOne
     private Farmacia farmacia;
+
+    public Receta() {
+        this.estado = TipoEstadoReceta.PLANIFICADA;
+    }
+
+    public Receta(Date fechaValidezFinal, Integer numUnidades) {
+        this();
+        this.fechaValidezFinal = fechaValidezFinal;
+        this.numUnidades = numUnidades;
+    }
 }

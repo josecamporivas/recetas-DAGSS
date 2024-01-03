@@ -3,8 +3,8 @@ package es.uvigo.dagss.recetas;
 import es.uvigo.dagss.recetas.entidades.*;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
 import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
+import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoReceta;
 import es.uvigo.dagss.recetas.repositorios.*;
-import org.hibernate.type.descriptor.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.text.ParseException;
 import java.util.List;
 
 @SpringBootApplication
@@ -36,6 +35,16 @@ public class RecetasApplication implements CommandLineRunner {
 	@Autowired
 	private CitaRepository citaRepository;
 
+	@Autowired
+	private MedicamentoRepository medicamentoRepository;
+
+	@Autowired
+	private PrescripcionRepository prescripcionRepository;
+
+	@Autowired
+	private RecetaRepository recetaRepository;
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(RecetasApplication.class, args);
 	}
@@ -45,7 +54,7 @@ public class RecetasApplication implements CommandLineRunner {
 		crearDatosEjemplo();
 	}
 
-	private void crearDatosEjemplo() throws ParseException {
+	private void crearDatosEjemplo() {
 
 		//ADMINISTRADORES
 		Administrador admin = new Administrador("admin1", "admin1");
@@ -105,7 +114,37 @@ public class RecetasApplication implements CommandLineRunner {
 		//FARMACIAS
 		Farmacia farmacia1 = new Farmacia("farmacia1", "123", new Direccion("Avenida Farmacia 1", "Ourense", 32004, "Ourense"), 986998877);
 		Farmacia farmacia2 = new Farmacia("farmacia2", "1234", new Direccion("Avenida Farmacia 2", "Ourense", 32004, "Ourense"), 986998877);
+		farmacia1.setNombreCompleto(new Nombre("Carla", "Alcalde", "Piñeiro"));
+		farmacia2.setNombreCompleto(new Nombre("Ivan", "Esteban", "Dominguez"));
 		farmaciaRepository.save(farmacia1);
 		farmaciaRepository.save(farmacia2);
+
+		//MEDICAMENTOS
+		Medicamento medicamento1 = new Medicamento("medicamento1", "principioActivo1", "fabricante1", "familia1", 3);
+		Medicamento medicamento2 = new Medicamento("medicamento2", "principioActivo2", "fabricante2", "familia2", 5);
+		medicamentoRepository.save(medicamento1);
+		medicamentoRepository.save(medicamento2);
+
+		//PRESCRIPCIONES
+		Prescripcion prescripcion1 = new Prescripcion(2.5, "Indicaciones prescripcion 1", Date.valueOf("2030-01-01"));
+		prescripcion1.setMedico(medico1);
+		prescripcion1.setPaciente(paciente1);
+		prescripcion1.setMedicamento(medicamento1);
+		Prescripcion prescripcion2 = new Prescripcion(5d, "Indicaciones prescripcion 2", Date.valueOf("2030-01-01"));
+		prescripcion2.setMedico(medico2);
+		prescripcion2.setPaciente(paciente2);
+		prescripcion2.setMedicamento(medicamento2);
+		prescripcionRepository.save(prescripcion1);
+		prescripcionRepository.save(prescripcion2);
+
+		//RECETAS
+		Receta receta1 = new Receta(Date.valueOf("2025-01-01"), 5);
+		receta1.setPrescripcion(prescripcion1);
+		Receta receta2 = new Receta(Date.valueOf("2025-01-01"), 3);
+		receta2.setPrescripcion(prescripcion2);
+		receta2.setEstado(TipoEstadoReceta.COMPLETADA);
+		receta2.setFarmacia(farmacia1);
+		recetaRepository.save(receta1);
+		recetaRepository.save(receta2);
 	}
 }

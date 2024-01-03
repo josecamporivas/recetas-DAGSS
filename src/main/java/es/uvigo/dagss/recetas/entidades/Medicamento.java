@@ -25,4 +25,17 @@ public class Medicamento implements Serializable {
     private Integer dosis;
 
     public Boolean estado;
+
+    public Medicamento(){
+        this.estado = true;
+    }
+
+    public Medicamento(String nombre, String principioActivo, String fabricante, String familia, Integer dosis) {
+        this();
+        this.nombre = nombre;
+        this.principioActivo = principioActivo;
+        this.fabricante = fabricante;
+        this.familia = familia;
+        this.dosis = dosis;
+    }
 }

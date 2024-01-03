@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -37,4 +37,15 @@ public class Prescripcion implements Serializable {
 
     @ManyToOne
     private Medicamento medicamento;
+
+    public Prescripcion() {
+        this.estado = true;
+    }
+
+    public Prescripcion(Double dosisDiaria, String indicaciones, Date fechaFinal) {
+        this();
+        this.dosisDiaria = dosisDiaria;
+        this.indicaciones = indicaciones;
+        this.fechaFinal = fechaFinal;
+    }
 }
