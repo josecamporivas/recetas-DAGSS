@@ -30,62 +30,60 @@ public class FarmaciaController {
 
     @GetMapping
     public ResponseEntity<List<Farmacia>> getAll(){
-        List<Farmacia> result = farmaciaService.getAll();
-        return new ResponseEntity<>(result,HttpStatus.OK);
+        return new ResponseEntity<>(farmaciaService.getAll(),HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Farmacia> getById(@PathVariable Long id){
         Optional<Farmacia> farmacia = farmaciaService.findById(id);
         if (farmacia.isEmpty()) {
-            throw new RuntimeException("No existe el paciente con id " + id);
+            throw new RuntimeException("No existe la farmacia con id " + id);
         }
         return new ResponseEntity<>(farmacia.get(), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{nombreFarmacia}")
+    @GetMapping(path = "/nombre/{nombreFarmacia}")
     public ResponseEntity<List<Farmacia>> getAllByNombreFarmacia(@PathVariable String nombreFarmacia){
         return new ResponseEntity<>(farmaciaService.findAllByNombreFarmacia(nombreFarmacia), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{numColegiadosFarmaceuticos}")
-    public ResponseEntity<List<Farmacia>> getByNombreFarmacia(@PathVariable String numColegiadosFarmaceuticos) {
+    @GetMapping(path = "/numColegiado/{numColegiadosFarmaceuticos}")
+    public ResponseEntity<List<Farmacia>> getByNunColegiado(@PathVariable String numColegiadosFarmaceuticos) {
         return new ResponseEntity<>(farmaciaService.findAllByNumColegiado(numColegiadosFarmaceuticos), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
-        Optional<Farmacia> farmacia = farmaciaService.findById(id);
-        if (farmacia.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
-        } else {
-            farmaciaService.delete(farmacia.get());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-    }
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Farmacia> create(@RequestBody Farmacia farmacia){
         Farmacia newFarmacia = farmaciaService.create(farmacia);
-        URI uri = createFarmacia(newFarmacia);
+        URI uri = createFarmaciaUri(newFarmacia);
 
         return ResponseEntity.created(uri).body(newFarmacia);
     }
-
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Farmacia> update(@PathVariable Long id, @RequestBody Farmacia farmacia){
         Optional<Farmacia> optionalFarmacia = farmaciaService.findById(id);
         farmacia.setId(id);
         if (optionalFarmacia.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
+            throw new RuntimeException("No existe la farmacia con id " + id);
         } else {
             Farmacia newFarmacia = farmaciaService.update(farmacia);
             return new ResponseEntity<>(newFarmacia, HttpStatus.OK);
         }
     }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
+        Optional<Farmacia> farmacia = farmaciaService.findById(id);
+        if (farmacia.isEmpty()) {
+            throw new RuntimeException("No existe la farmacia con id " + id);
+        } else {
+            farmaciaService.delete(farmacia.get());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 
-    private URI createFarmacia(Farmacia farmacia) {
+    private URI createFarmaciaUri(Farmacia farmacia) {
         return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(farmacia.getId())
                 .toUri();
     }

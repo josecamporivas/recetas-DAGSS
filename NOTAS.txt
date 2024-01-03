@@ -7,3 +7,4 @@ Pasos:
 - Si es una funcion del propio repositorio, filtrarla en el service
 
 3. Hacer que las fechas de alta no se modifiquen en cada consulta
+4. Hacer la incializacion de los datos más completa

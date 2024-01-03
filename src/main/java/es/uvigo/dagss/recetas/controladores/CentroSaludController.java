@@ -50,14 +50,6 @@ public class CentroSaludController {
         List<CentroSalud> result = centroSaludService.getAll();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    
-    @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CentroSalud> create(@RequestBody CentroSalud centroSalud) {
-        CentroSalud newCentroSalud = centroSaludService.create(centroSalud);
-		URI uri = createCentroSaludUri(newCentroSalud);
-
-		return ResponseEntity.created(uri).body(centroSalud);
-    }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<CentroSalud> getById(@PathVariable("id") Long id) {
@@ -68,6 +60,14 @@ public class CentroSaludController {
 
             return new ResponseEntity<>(centroSalud.get(), HttpStatus.OK);
         }
+    }
+
+    @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CentroSalud> create(@RequestBody CentroSalud centroSalud) {
+        CentroSalud newCentroSalud = centroSaludService.create(centroSalud);
+        URI uri = createCentroSaludUri(newCentroSalud);
+
+        return ResponseEntity.created(uri).body(centroSalud);
     }
     
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)

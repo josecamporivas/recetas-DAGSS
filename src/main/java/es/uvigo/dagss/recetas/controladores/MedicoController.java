@@ -60,7 +60,7 @@ public class MedicoController {
         return new ResponseEntity<>(medicoService.findAllByCentroSalud(centroSalud), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Medico> create(@RequestBody Medico medico){
         Medico newMedico = medicoService.create(medico);
         URI uri = createPacienteUri(newMedico);
