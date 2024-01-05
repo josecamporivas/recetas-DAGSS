@@ -6,7 +6,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class Prescripcion implements Serializable {
     private Date fechaInicio;
 
     @Temporal(TemporalType.DATE)
-    private Date fechaFinal;
+    private java.sql.Date fechaFinal;
 
     @Value("true")
     private boolean estado;
@@ -40,9 +41,10 @@ public class Prescripcion implements Serializable {
 
     public Prescripcion() {
         this.estado = true;
+        this.fechaInicio = Calendar.getInstance().getTime();
     }
 
-    public Prescripcion(Double dosisDiaria, String indicaciones, Date fechaFinal) {
+    public Prescripcion(Double dosisDiaria, String indicaciones, java.sql.Date fechaFinal) {
         this();
         this.dosisDiaria = dosisDiaria;
         this.indicaciones = indicaciones;

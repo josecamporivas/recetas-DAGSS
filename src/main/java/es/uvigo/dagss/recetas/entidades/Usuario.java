@@ -57,7 +57,7 @@ public abstract class Usuario implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimoAcceso;
 
-	private Boolean estado = true;
+	private Boolean estado;
 	
     public Usuario() {
         this.fechaAlta = Calendar.getInstance().getTime();
