@@ -138,11 +138,11 @@ public class RecetasApplication implements CommandLineRunner {
 		prescripcionRepository.save(prescripcion2);
 
 		//RECETAS
-		Receta receta1 = new Receta(Date.valueOf("2025-01-01"), 5);
+		Receta receta1 = new Receta(Date.valueOf("2025-01-01"), Date.valueOf("2025-01-05"), 5);
 		receta1.setPrescripcion(prescripcion1);
-		Receta receta2 = new Receta(Date.valueOf("2025-01-01"), 3);
+		Receta receta2 = new Receta(Date.valueOf("2024-01-01"), Date.valueOf("2024-01-05"), 3);
 		receta2.setPrescripcion(prescripcion2);
-		receta2.setEstado(TipoEstadoReceta.COMPLETADA);
+		receta2.setEstado(TipoEstadoReceta.SERVIDA);
 		receta2.setFarmacia(farmacia1);
 		recetaRepository.save(receta1);
 		recetaRepository.save(receta2);

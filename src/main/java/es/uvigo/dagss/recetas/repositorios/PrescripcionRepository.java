@@ -10,8 +10,7 @@ import java.util.List;
 
 public interface PrescripcionRepository extends JpaRepository<Prescripcion, Long> {
 
-    @Query("select p from Prescripcion p where p.paciente.id = :pacienteId and p.fechaFinal >= CURRENT_DATE order by p.fechaInicio")
+    @Query("select p from Prescripcion p where p.paciente.id = :pacienteId and p.fechaFinal >= CURRENT_DATE and p.estado order by p.fechaInicio")
     public List<Prescripcion> findAllByPacienteAndEnVigor(@Param("pacienteId") Long pacienteId);
-
-    public List<Prescripcion> findAllByPacienteAndEstado(Paciente paciente, boolean estado);
+    public List<Prescripcion> findAllByPaciente_IdAndEstadoTrue(Long idPaciente);
 }

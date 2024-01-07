@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 
 @Getter
@@ -18,11 +19,11 @@ public class Receta implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaValidezInicial;
 
     @Temporal(TemporalType.DATE)
-    private java.sql.Date fechaValidezFinal;
+    private Date fechaValidezFinal;
 
     private TipoEstadoReceta estado;
 
@@ -36,11 +37,11 @@ public class Receta implements Serializable {
 
     public Receta() {
         this.estado = TipoEstadoReceta.PLANIFICADA;
-        this.fechaValidezInicial = Calendar.getInstance().getTime();
     }
 
-    public Receta(java.sql.Date fechaValidezFinal, Integer numUnidades) {
+    public Receta(Date fechaValidezInicial, Date fechaValidezFinal, Integer numUnidades) {
         this();
+        this.fechaValidezInicial = fechaValidezInicial;
         this.fechaValidezFinal = fechaValidezFinal;
         this.numUnidades = numUnidades;
     }

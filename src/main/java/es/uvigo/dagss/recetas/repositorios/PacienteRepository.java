@@ -4,13 +4,14 @@ import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
-    public Paciente getByLoginAndPassword(String login, String password);
+    public Optional<Paciente> findByNumTarjetaSanitaria(String numTarjetaSanitaria);
     public List<Paciente> findByDireccionLocalidadContainingAndEstadoTrue(String localidad);
     public List<Paciente> findByMedicoAsignadoIdAndEstadoTrue(Long medicoAsignadoId);
     public List<Paciente> findAllByMedicoAsignadoInAndEstadoTrue(List<Medico> medicos);

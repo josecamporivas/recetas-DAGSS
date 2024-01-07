@@ -54,7 +54,7 @@ public class PrescripcionService {
     }
 
     public void delete(Prescripcion prescripcion){
-        List<Receta> recetaList = recetaRepository.findAllByPrescripcion(prescripcion);
+        List<Receta> recetaList = recetaRepository.findAllByPrescripcion_IdPrescripcion(prescripcion.getIdPrescripcion());
         for(Receta r: recetaList){
             r.setEstado(TipoEstadoReceta.ANULADA);
             recetaRepository.save(r);

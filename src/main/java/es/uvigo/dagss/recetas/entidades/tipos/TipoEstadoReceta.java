@@ -3,7 +3,7 @@ package es.uvigo.dagss.recetas.entidades.tipos;
 public enum TipoEstadoReceta {
     PLANIFICADA ("PLANIFICADA"),
     ANULADA     ("ANULADA"),
-    COMPLETADA  ("SERVIDA");
+    SERVIDA  ("SERVIDA");
 
     private final String etiqueta;
 

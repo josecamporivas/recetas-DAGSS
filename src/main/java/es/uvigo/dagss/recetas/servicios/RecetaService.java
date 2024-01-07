@@ -5,15 +5,14 @@ import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.Prescripcion;
 import es.uvigo.dagss.recetas.entidades.Receta;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoEstadoReceta;
+import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
 import es.uvigo.dagss.recetas.repositorios.PrescripcionRepository;
 import es.uvigo.dagss.recetas.repositorios.RecetaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RecetaService {
@@ -24,30 +23,50 @@ public class RecetaService {
     @Autowired
     private PrescripcionRepository prescripcionRepository;
 
+    @Autowired
+    private PacienteRepository pacienteRepository;
+
+    public List<Receta> getAll(){
+        return recetaRepository.findAll().stream().filter(r -> r.getEstado() == TipoEstadoReceta.PLANIFICADA || r.getEstado() == TipoEstadoReceta.SERVIDA).toList();
+    }
+
+    public Optional<Receta> findById(Long id){
+        Optional<Receta> receta = recetaRepository.findById(id);
+        if(receta.isPresent() && receta.get().getEstado() == TipoEstadoReceta.ANULADA){
+            return Optional.empty();
+        }
+        return receta;
+    }
+
     /*  Esto corresponde a HU-P4, falta ordenar por fecha   */
-    public List<Receta> findAllByPacienteAndEstadoPlanificada(Paciente paciente){
-        List<Prescripcion> prescripcionList = prescripcionRepository.findAllByPacienteAndEstado(paciente, true);
+    public List<Receta> findAllByPacienteAndEstadoPlanificada(Long idPaciente){
+        Optional<Paciente> paciente = pacienteRepository.findById(idPaciente);
+        if(paciente.isEmpty()){
+            throw new RuntimeException("No existe el paciente con id " + idPaciente);
+        }
+
+        return getRecetasDisponiblesByPacienteId(idPaciente);
+    }
+
+    public List<Receta> findAllByPacienteNumTarjeta(String numTarjeta){
+        Optional<Paciente> paciente = pacienteRepository.findByNumTarjetaSanitaria(numTarjeta);
+        if(paciente.isEmpty()){
+            throw new RuntimeException("No existe el paciente con numTarjeta " + numTarjeta);
+        }
+        return getRecetasDisponiblesByPacienteId(paciente.get().getId());
+    }
+
+    private List<Receta> getRecetasDisponiblesByPacienteId(Long pacienteId){
+        List<Prescripcion> prescripcionList = prescripcionRepository.findAllByPacienteAndEnVigor(pacienteId);
 
         List<Receta> recetaPlanificadaList = new ArrayList<>();
 
         for(Prescripcion prescripcion: prescripcionList){
-            List<Receta> recetasPrescripcionPaciente = recetaRepository.findAllByPrescripcion(prescripcion);
+            List<Receta> recetasPrescripcionPaciente = recetaRepository.findAllByPrescripcion_IdPrescripcionAndEstado(prescripcion.getIdPrescripcion(), TipoEstadoReceta.PLANIFICADA);
             recetaPlanificadaList.addAll(recetasPrescripcionPaciente);
         }
 
-        return recetaPlanificadaList;
-    }
-
-    public List<Receta> findAllByPacienteNumTarjeta(String numTarjeta){
-        List<Receta> allRecetasPaciente = recetaRepository.findAllByPrescripcionPacienteNumTarjetaSanitaria(numTarjeta);
-        List<Receta> recetasDisponibles = new ArrayList<>();
-
-        for(Receta r: allRecetasPaciente){
-            if(r.getEstado().equals(TipoEstadoReceta.PLANIFICADA)){
-                recetasDisponibles.add(r);
-            }
-        }
-        return recetasDisponibles;
+        return recetaPlanificadaList.stream().sorted(Comparator.comparing(Receta::getFechaValidezInicial)).toList();
     }
 
     public Receta setServida(Receta receta, Farmacia farmacia){
@@ -57,13 +76,25 @@ public class RecetaService {
         if(!receta.getEstado().equals(TipoEstadoReceta.PLANIFICADA) ||
                 !receta.getFechaValidezInicial().after(now) ||
                 !receta.getFechaValidezFinal().before(now)){
-            //WIP: lanzar excepcion la receta no se puede modificar porque no está disponible
+            throw new RuntimeException("La receta no se puede modificar porque no está disponible");
         }
 
         receta.setFarmacia(farmacia);
-        receta.setEstado(TipoEstadoReceta.COMPLETADA);
+        receta.setEstado(TipoEstadoReceta.SERVIDA);
         recetaRepository.save(receta);
 
         return receta;
+    }
+
+    public Receta create(Receta receta){
+        return recetaRepository.save(receta);
+    }
+
+    public Receta update(Receta receta){
+        return recetaRepository.save(receta);
+    }
+
+    public void delete(Long id){
+        recetaRepository.deleteById(id);
     }
 }
