@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.servicios;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Farmacia;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.Prescripcion;
@@ -38,11 +39,10 @@ public class RecetaService {
         return receta;
     }
 
-    /*  Esto corresponde a HU-P4, falta ordenar por fecha   */
     public List<Receta> findAllByPacienteAndEstadoPlanificada(Long idPaciente){
         Optional<Paciente> paciente = pacienteRepository.findById(idPaciente);
         if(paciente.isEmpty()){
-            throw new RuntimeException("No existe el paciente con id " + idPaciente);
+            throw new ResourceNotFoundException("No existe el paciente con id " + idPaciente);
         }
 
         return getRecetasDisponiblesByPacienteId(idPaciente);
@@ -51,7 +51,7 @@ public class RecetaService {
     public List<Receta> findAllByPacienteNumTarjeta(String numTarjeta){
         Optional<Paciente> paciente = pacienteRepository.findByNumTarjetaSanitaria(numTarjeta);
         if(paciente.isEmpty()){
-            throw new RuntimeException("No existe el paciente con numTarjeta " + numTarjeta);
+            throw new ResourceNotFoundException("No existe el paciente con numTarjeta " + numTarjeta);
         }
         return getRecetasDisponiblesByPacienteId(paciente.get().getId());
     }
@@ -67,23 +67,6 @@ public class RecetaService {
         }
 
         return recetaPlanificadaList.stream().sorted(Comparator.comparing(Receta::getFechaValidezInicial)).toList();
-    }
-
-    public Receta setServida(Receta receta, Farmacia farmacia){
-
-        Date now = Date.from(Instant.now());
-
-        if(!receta.getEstado().equals(TipoEstadoReceta.PLANIFICADA) ||
-                !receta.getFechaValidezInicial().after(now) ||
-                !receta.getFechaValidezFinal().before(now)){
-            throw new RuntimeException("La receta no se puede modificar porque no está disponible");
-        }
-
-        receta.setFarmacia(farmacia);
-        receta.setEstado(TipoEstadoReceta.SERVIDA);
-        recetaRepository.save(receta);
-
-        return receta;
     }
 
     public Receta create(Receta receta){

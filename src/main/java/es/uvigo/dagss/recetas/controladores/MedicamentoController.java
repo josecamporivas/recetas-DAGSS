@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Medicamento;
 import es.uvigo.dagss.recetas.servicios.MedicamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/medicamentos")
+@RequestMapping(path = "/medicamentos", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MedicamentoController {
 
     @Autowired
@@ -29,7 +30,7 @@ public class MedicamentoController {
     public ResponseEntity<Medicamento> getById(@PathVariable Long id){
         Optional<Medicamento> medicamento = medicamentoService.findById(id);
         if (medicamento.isEmpty()) {
-            throw new RuntimeException("No existe el medicamento con id " + id);
+            throw new ResourceNotFoundException("No existe el medicamento con id " + id);
         }
         return new ResponseEntity<>(medicamento.get(), HttpStatus.OK);
     }
@@ -67,18 +68,18 @@ public class MedicamentoController {
         Optional<Medicamento> medicamentoOptional = medicamentoService.findById(id);
         medicamento.setIdMedicamento(id);
         if (medicamentoOptional.isEmpty()) {
-            throw new RuntimeException("No existe el medicamento con id " + id);
-        } else {
-            Medicamento newMedicamento = medicamentoService.update(medicamento);
-            return new ResponseEntity<>(newMedicamento, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el medicamento con id " + id);
         }
+
+        Medicamento newMedicamento = medicamentoService.update(medicamento);
+        return new ResponseEntity<>(newMedicamento, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
         Optional<Medicamento> medicamento = medicamentoService.findById(id);
         if(medicamento.isEmpty()){
-            throw new RuntimeException("No existe el medicamento con id " + id);
+            throw new ResourceNotFoundException("No existe el medicamento con id " + id);
         }
         medicamentoService.delete(medicamento.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

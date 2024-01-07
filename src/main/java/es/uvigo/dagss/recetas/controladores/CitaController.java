@@ -1,10 +1,13 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Cita;
 import es.uvigo.dagss.recetas.entidades.Medico;
+import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.servicios.CitaService;
 import es.uvigo.dagss.recetas.servicios.MedicoService;
 
+import es.uvigo.dagss.recetas.servicios.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +28,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/citas", produces = "application/json")
+@RequestMapping(path = "/citas", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CitaController {
     @Autowired
     private CitaService citaService;
     
     @Autowired
     private MedicoService medicoService;
+
+    @Autowired
+    private PacienteService pacienteService;
     
     @GetMapping
     public ResponseEntity<List<Cita>> getAll() {
@@ -43,7 +49,7 @@ public class CitaController {
     public ResponseEntity<Cita> findById(@PathVariable Long id){
         Optional<Cita> optionalCita = citaService.findById(id);
         if(optionalCita.isEmpty()){
-            throw new RuntimeException("No existe una cita con el id " + id);
+            throw new ResourceNotFoundException("No existe una cita con el id " + id);
         }
 
         return new ResponseEntity<>(optionalCita.get(), HttpStatus.OK);
@@ -53,7 +59,7 @@ public class CitaController {
     public ResponseEntity<List<Cita>> findAllByMedico(@PathVariable Long medicoId) {
         Optional<Medico> medicoCita = medicoService.findById(medicoId);
         if(medicoCita.isEmpty()){
-            throw new RuntimeException("No existe un medico con el id " + medicoId);
+            throw new ResourceNotFoundException("No existe un medico con el id " + medicoId);
         }
         List<Cita> result = citaService.findAllByMedico(medicoCita.get());
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -63,10 +69,20 @@ public class CitaController {
     public ResponseEntity<List<Cita>> findAllByMedicoForToday(@PathVariable Long medicoId) {
         Optional<Medico> medico = medicoService.findById(medicoId);
         if(medico.isEmpty()){
-            throw new RuntimeException("No existe el médico con id " + medicoId);
+            throw new ResourceNotFoundException("No existe el médico con id " + medicoId);
         }
 
         List<Cita> result = citaService.findAllByMedicoForToday(medico.get());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/paciente/{pacienteId}")
+    public ResponseEntity<List<Cita>> findAllByPaciente(@PathVariable Long pacienteId) {
+        Optional<Paciente> pacienteOptional = pacienteService.findById(pacienteId);
+        if(pacienteOptional.isEmpty()){
+            throw new ResourceNotFoundException("No existe el paciente con el id " + pacienteId);
+        }
+        List<Cita> result = citaService.findByPaciente(pacienteOptional.get());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -84,22 +100,21 @@ public class CitaController {
         cita.setIdCita(id);
 
         if (optionalCita.isEmpty()) {
-            throw new RuntimeException("No existe la cita con id " + id);
-        } else {
-            Cita updatedCita = citaService.update(cita);
-            return new ResponseEntity<>(updatedCita, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe la cita con id " + id);
         }
+
+        Cita updatedCita = citaService.update(cita);
+        return new ResponseEntity<>(updatedCita, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> setAnulada(@PathVariable Long id) {
         Optional<Cita> cita = citaService.findById(id);
         if (cita.isEmpty()) {
-            throw new RuntimeException("No existe la cita con id " + id);
-        } else {
-            citaService.setAnulada(cita.get());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("No existe la cita con id " + id);
         }
+        citaService.setAnulada(cita.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private URI createCitaUri(Cita cita) {

@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.servicios.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/pacientes")
+@RequestMapping(path = "/pacientes", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PacienteController {
 
     @Autowired
@@ -29,7 +30,7 @@ public class PacienteController {
     public ResponseEntity<Paciente> getById(@PathVariable Long id){
         Optional<Paciente> paciente = pacienteService.findById(id);
         if (paciente.isEmpty()) {
-            throw new RuntimeException("No existe el paciente con id " + id);
+            throw new ResourceNotFoundException("No existe el paciente con id " + id);
         }
         return new ResponseEntity<>(paciente.get(), HttpStatus.OK);
     }
@@ -67,22 +68,22 @@ public class PacienteController {
         Optional<Paciente> optionalPaciente = pacienteService.findById(id);
         paciente.setId(id);
         if (optionalPaciente.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
-        } else {
-            Paciente newPaciente = pacienteService.update(paciente);
-            return new ResponseEntity<>(newPaciente, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el paciente con id " + id);
         }
+
+        Paciente newPaciente = pacienteService.update(paciente);
+        return new ResponseEntity<>(newPaciente, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
         Optional<Paciente> optionalPaciente = pacienteService.findById(id);
         if (optionalPaciente.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
-        } else {
-            pacienteService.delete(optionalPaciente.get());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("No existe el paciente con id " + id);
         }
+
+        pacienteService.delete(optionalPaciente.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private URI createPacienteUri(Paciente paciente) {

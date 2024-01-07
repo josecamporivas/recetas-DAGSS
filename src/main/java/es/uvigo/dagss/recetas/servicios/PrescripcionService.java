@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.servicios;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.Prescripcion;
 import es.uvigo.dagss.recetas.entidades.Receta;
@@ -48,7 +49,7 @@ public class PrescripcionService {
     public List<Prescripcion> findAllByPacienteAndActiva(Long idPaciente){
         Optional<Paciente> paciente = pacienteRepository.findById(idPaciente);
         if(paciente.isEmpty()){
-            throw new RuntimeException("No existe el paciente con id " + idPaciente);
+            throw new ResourceNotFoundException("No existe el paciente con id " + idPaciente);
         }
         return prescripcionRepository.findAllByPacienteAndEnVigor(idPaciente);
     }

@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Farmacia;
 import es.uvigo.dagss.recetas.servicios.FarmaciaService;
 
@@ -37,7 +38,7 @@ public class FarmaciaController {
     public ResponseEntity<Farmacia> getById(@PathVariable Long id){
         Optional<Farmacia> farmacia = farmaciaService.findById(id);
         if (farmacia.isEmpty()) {
-            throw new RuntimeException("No existe la farmacia con id " + id);
+            throw new ResourceNotFoundException("No existe la farmacia con id " + id);
         }
         return new ResponseEntity<>(farmacia.get(), HttpStatus.OK);
     }
@@ -65,22 +66,22 @@ public class FarmaciaController {
         Optional<Farmacia> optionalFarmacia = farmaciaService.findById(id);
         farmacia.setId(id);
         if (optionalFarmacia.isEmpty()) {
-            throw new RuntimeException("No existe la farmacia con id " + id);
-        } else {
-            Farmacia newFarmacia = farmaciaService.update(farmacia);
-            return new ResponseEntity<>(newFarmacia, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe la farmacia con id " + id);
         }
+
+        Farmacia newFarmacia = farmaciaService.update(farmacia);
+        return new ResponseEntity<>(newFarmacia, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<Farmacia> farmacia = farmaciaService.findById(id);
         if (farmacia.isEmpty()) {
-            throw new RuntimeException("No existe la farmacia con id " + id);
-        } else {
-            farmaciaService.delete(farmacia.get());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("No existe la farmacia con id " + id);
         }
+
+        farmaciaService.delete(farmacia.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private URI createFarmaciaUri(Farmacia farmacia) {

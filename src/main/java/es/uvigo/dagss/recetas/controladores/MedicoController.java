@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Medico;
 import es.uvigo.dagss.recetas.servicios.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class MedicoController {
     public ResponseEntity<Medico> getById(@PathVariable Long id){
         Optional<Medico> medico = medicoService.findById(id);
         if (medico.isEmpty()) {
-            throw new RuntimeException("No existe el medico con id " + id);
+            throw new ResourceNotFoundException("No existe el medico con id " + id);
         }
         return new ResponseEntity<>(medico.get(), HttpStatus.OK);
     }
@@ -40,7 +41,7 @@ public class MedicoController {
     public ResponseEntity<List<Time>> getHuecosLibres(@PathVariable Long id, @RequestParam("fecha") Date fecha){
         Optional<Medico> medico = medicoService.findById(id);
         if (medico.isEmpty()) {
-            throw new RuntimeException("No existe el medico con id " + id);
+            throw new ResourceNotFoundException("No existe el medico con id " + id);
         }
         return new ResponseEntity<>(medicoService.findFreeSpaceSchedule(medico.get().getId(), fecha), HttpStatus.OK);
     }
@@ -73,22 +74,22 @@ public class MedicoController {
         Optional<Medico> optionalMedico = medicoService.findById(id);
         medico.setId(id);
         if (optionalMedico.isEmpty()) {
-            throw new RuntimeException("No existe el medico con id " + id);
-        } else {
-            Medico newMedico = medicoService.update(medico);
-            return new ResponseEntity<>(newMedico, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el medico con id " + id);
         }
+
+        Medico newMedico = medicoService.update(medico);
+        return new ResponseEntity<>(newMedico, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
         Optional<Medico> optionalMedico = medicoService.findById(id);
         if (optionalMedico.isEmpty()) {
-            throw new RuntimeException("No existe el medico con id " + id);
-        } else {
-            medicoService.delete(optionalMedico.get());
-            return new ResponseEntity<>(HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el medico con id " + id);
         }
+
+        medicoService.delete(optionalMedico.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private URI createPacienteUri(Medico newMedico) {

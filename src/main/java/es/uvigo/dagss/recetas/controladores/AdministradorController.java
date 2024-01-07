@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Administrador;
 import es.uvigo.dagss.recetas.servicios.AdministradorService;
 
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 @RestController
-@RequestMapping(path = "/administradores", produces = "application/json")
+@RequestMapping(path = "/administradores", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdministradorController {
 
     @Autowired
@@ -40,14 +41,12 @@ public class AdministradorController {
     public ResponseEntity<Administrador> getById(@PathVariable("id") Long id) {
         Optional<Administrador> admin = administradorService.findById(id);
         if (admin.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
-        } else {
-            return new ResponseEntity<>(admin.get(), HttpStatus.OK);
-
+            throw new ResourceNotFoundException("No existe el administrador con id " + id);
         }
+        return new ResponseEntity<>(admin.get(), HttpStatus.OK);
+
     }
 
-    //duda. aqui el profesor usa @valid, a mi me da error porque import jakarta.validation.Valid; tp va
     @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Administrador> create(@RequestBody Administrador administrador) {
         Administrador newAdministrador = administradorService.create(administrador);
@@ -61,22 +60,23 @@ public class AdministradorController {
         Optional<Administrador> optionalAdministrador = administradorService.findById(id);
         administrador.setId(id);
 		if (optionalAdministrador.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
-		} else {
-			Administrador newAdministrador = administradorService.update(administrador);
-			return new ResponseEntity<>(newAdministrador, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el administrador con id " + id);
 		}
+
+        Administrador newAdministrador = administradorService.update(administrador);
+        return new ResponseEntity<>(newAdministrador, HttpStatus.OK);
+
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<Administrador> admin = administradorService.findById(id);
         if (admin.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id);
-        } else {
-            administradorService.delete(admin.get());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("No existe el administrador con id " + id);
         }
+
+        administradorService.delete(admin.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private URI createAdminstradorUri(Administrador administrador) {

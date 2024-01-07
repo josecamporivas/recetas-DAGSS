@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.CentroSalud;
 import es.uvigo.dagss.recetas.servicios.CentroSaludService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +26,21 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/centrosSalud", produces = "application/json")
+@RequestMapping(path = "/centrosSalud", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CentroSaludController {
 
     @Autowired
     private CentroSaludService centroSaludService;
 
-    @GetMapping(params = "nombre")
-    public ResponseEntity<List<CentroSalud>> findAllByNombre(@RequestParam(name = "nombre", required = true) String nombre) {
+    @GetMapping(path = "/nombre/{nombre}")
+    public ResponseEntity<List<CentroSalud>> findAllByNombre(@PathVariable String nombre) {
         List<CentroSalud> centrosSalud = centroSaludService.findAllByNombre(nombre);
 
         return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
     }
 
-    @GetMapping(params = "localidad")
-    public ResponseEntity<List<CentroSalud>> findAllByLocalidad(@RequestParam(name = "localidad", required = true) String localidad) {
+    @GetMapping(path = "/localidad/{localidad}")
+    public ResponseEntity<List<CentroSalud>> findAllByLocalidad(@PathVariable String localidad) {
         List<CentroSalud> centrosSalud = centroSaludService.findAllByLocalidad(localidad);
 
         return new ResponseEntity<>(centrosSalud, HttpStatus.OK);
@@ -55,11 +56,10 @@ public class CentroSaludController {
     public ResponseEntity<CentroSalud> getById(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {
-            throw new RuntimeException("No existe el centro de salud con id " + id);
-        } else {
-
-            return new ResponseEntity<>(centroSalud.get(), HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el centro de salud con id " + id);
         }
+
+        return new ResponseEntity<>(centroSalud.get(), HttpStatus.OK);
     }
 
     @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -75,22 +75,22 @@ public class CentroSaludController {
         Optional<CentroSalud> optionalCentroSalud = centroSaludService.findById(id);
         centroSalud.setIdCentro(id);
 		if (optionalCentroSalud.isEmpty()) {
-            throw new RuntimeException("No existe el centro de salud con id " + id);
-		} else {
-			CentroSalud newCentroSalud = centroSaludService.update(centroSalud);
-			return new ResponseEntity<>(newCentroSalud, HttpStatus.OK);
+            throw new ResourceNotFoundException("No existe el centro de salud con id " + id);
 		}
+
+        CentroSalud newCentroSalud = centroSaludService.update(centroSalud);
+        return new ResponseEntity<>(newCentroSalud, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {
-            throw new RuntimeException("No existe el administrador con id " + id); //TODO: handle exceptions
-        } else {
-            centroSaludService.delete(centroSalud.get());
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("No existe el administrador con id " + id); //TODO: handle exceptions
         }
+
+        centroSaludService.delete(centroSalud.get());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private URI createCentroSaludUri(CentroSalud centroSalud) {

@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Paciente;
 import es.uvigo.dagss.recetas.entidades.Prescripcion;
 import es.uvigo.dagss.recetas.repositorios.PacienteRepository;
@@ -17,13 +18,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/prescripciones")
+@RequestMapping(path = "/prescripciones", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PrescripcionController {
     @Autowired
     private PrescripcionService prescripcionService;
-
-    @Autowired
-    private PacienteService pacienteService;
 
     @GetMapping
     public ResponseEntity<List<Prescripcion>> getAll(){
@@ -34,7 +32,7 @@ public class PrescripcionController {
     public ResponseEntity<Prescripcion> getById(@PathVariable Long id){
         Optional<Prescripcion> prescripcion = prescripcionService.findById(id);
         if (prescripcion.isEmpty()) {
-            throw new RuntimeException("No existe la prescripcion con id " + id);
+            throw new ResourceNotFoundException("No existe la prescripcion con id " + id);
         }
         return new ResponseEntity<>(prescripcion.get(), HttpStatus.OK);
     }
@@ -51,13 +49,13 @@ public class PrescripcionController {
         return ResponseEntity.created(uri).body(newPrescripcion);
     }
 
-    @PutMapping(path = "/{id}")
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Prescripcion> setAnulada(@PathVariable Long id, @RequestBody Prescripcion prescripcion){
         Optional<Prescripcion> prescripcionOptional = prescripcionService.findById(id);
         prescripcion.setIdPrescripcion(id);
 
         if (prescripcionOptional.isEmpty()) {
-            throw new RuntimeException("No existe la prescripcion con id " + id);
+            throw new ResourceNotFoundException("No existe la prescripcion con id " + id);
         }
 
         return new ResponseEntity<>(prescripcionService.update(prescripcion), HttpStatus.OK);
@@ -68,7 +66,7 @@ public class PrescripcionController {
         Optional<Prescripcion> prescripcionOptional = prescripcionService.findById(id);
 
         if (prescripcionOptional.isEmpty()) {
-            throw new RuntimeException("No existe la prescripcion con id " + id);
+            throw new ResourceNotFoundException("No existe la prescripcion con id " + id);
         }
         prescripcionService.delete(prescripcionOptional.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

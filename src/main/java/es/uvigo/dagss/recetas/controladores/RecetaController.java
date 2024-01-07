@@ -1,5 +1,6 @@
 package es.uvigo.dagss.recetas.controladores;
 
+import es.uvigo.dagss.recetas.controladores.excepciones.ResourceNotFoundException;
 import es.uvigo.dagss.recetas.entidades.Receta;
 import es.uvigo.dagss.recetas.servicios.RecetaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class RecetaController {
     public ResponseEntity<Receta> getRecetaById(@PathVariable Long id) {
         Optional<Receta> receta = recetaService.findById(id);
         if(receta.isEmpty()){
-            throw new RuntimeException("No existe la receta con id " + id);
+            throw new ResourceNotFoundException("No existe la receta con id " + id);
         }
         return new ResponseEntity<>(receta.get(), HttpStatus.OK);
     }
@@ -56,7 +57,7 @@ public class RecetaController {
         receta.setId(id);
 
         if (recetaOptional.isEmpty()) {
-            throw new RuntimeException("No existe la receta con id " + id);
+            throw new ResourceNotFoundException("No existe la receta con id " + id);
         }
 
         Receta updatedReceta = recetaService.update(receta);
@@ -68,7 +69,7 @@ public class RecetaController {
         Optional<Receta> recetaOptional = recetaService.findById(id);
 
         if (recetaOptional.isEmpty()) {
-            throw new RuntimeException("No existe la receta con id " + id);
+            throw new ResourceNotFoundException("No existe la receta con id " + id);
         }
 
         recetaService.delete(id);
