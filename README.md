@@ -80,6 +80,5 @@ spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.Ph
 ```
 ## EJECUTAR PROYECTO
 ```shell
-mvn package //no se si hace falta
 mvn spring-boot:run
 ```

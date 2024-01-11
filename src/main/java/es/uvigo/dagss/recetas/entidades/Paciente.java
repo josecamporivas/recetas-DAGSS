@@ -4,6 +4,7 @@ package es.uvigo.dagss.recetas.entidades;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import es.uvigo.dagss.recetas.entidades.tipos.Direccion;
+import es.uvigo.dagss.recetas.entidades.tipos.Nombre;
 import es.uvigo.dagss.recetas.entidades.tipos.TipoUsuario;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,12 +39,16 @@ public class Paciente extends Usuario {
         super(TipoUsuario.PACIENTE);
     }
 
-    public Paciente(String numTarjetaSanitaria, String numSS, Direccion direccion, Integer telefono, Date fechaNac) {
-        super(TipoUsuario.PACIENTE);
+    public Paciente(String numTarjetaSanitaria, String numSS, Direccion direccion, Integer telefono, Date fechaNac,
+                    String DNI, Nombre nombreCompleto, String email, String login, String password) {
+        super(TipoUsuario.PACIENTE, login, password);
         this.numTarjetaSanitaria = numTarjetaSanitaria;
         this.numSS = numSS;
         this.direccion = direccion;
         this.telefono = telefono;
         this.fechaNac = fechaNac;
+        this.DNI = DNI;
+        this.nombreCompleto = nombreCompleto;
+        this.email = email;
     }
 }
