@@ -72,7 +72,7 @@ public class RecetaController {
             throw new ResourceNotFoundException("No existe la receta con id " + id);
         }
 
-        recetaService.delete(id);
+        recetaService.setAnulada(recetaOptional.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

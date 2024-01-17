@@ -77,7 +77,8 @@ public class RecetaService {
         return recetaRepository.save(receta);
     }
 
-    public void delete(Long id){
-        recetaRepository.deleteById(id);
+    public void setAnulada(Receta receta){
+        receta.setEstado(TipoEstadoReceta.ANULADA);
+        recetaRepository.save(receta);
     }
 }
