@@ -65,7 +65,7 @@ public class CitaController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping(path="/medico/{medicoId}/today")
+    @GetMapping(path="/medico/{medicoId}/hoy")
     public ResponseEntity<List<Cita>> findAllByMedicoForToday(@PathVariable Long medicoId) {
         Optional<Medico> medico = medicoService.findById(medicoId);
         if(medico.isEmpty()){
