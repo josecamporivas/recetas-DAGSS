@@ -86,7 +86,7 @@ public class CentroSaludController {
     public ResponseEntity<HttpStatus> delete(@PathVariable("id") Long id) {
         Optional<CentroSalud> centroSalud = centroSaludService.findById(id);
         if (centroSalud.isEmpty()) {
-            throw new ResourceNotFoundException("No existe el administrador con id " + id); //TODO: handle exceptions
+            throw new ResourceNotFoundException("No existe el administrador con id " + id);
         }
 
         centroSaludService.delete(centroSalud.get());

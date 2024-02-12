@@ -16,7 +16,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     public List<Paciente> findByMedicoAsignadoIdAndEstadoTrue(Long medicoAsignadoId);
     public List<Paciente> findAllByMedicoAsignadoInAndEstadoTrue(List<Medico> medicos);
 
-    //TODO: no se si funcionará
     @Query("SELECT p FROM Paciente p WHERE p.estado = true and p.nombreCompleto.nombre like concat('%', ?1, '%') or p.nombreCompleto.apellido1 like concat('%', ?1, '%') or p.nombreCompleto.apellido2 like concat('%', ?1, '%')")
     public List<Paciente> findByNombreCompletoAndActivo(String nombre);
 }
